@@ -1,0 +1,9 @@
+/.vs
+/.vscode
+
+/obj
+*.o
+*.d
+
+/bankat.zip
+/bananacat.zip
