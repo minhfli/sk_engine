@@ -4,7 +4,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include <Game/Entity.h>
+#include "phy_tag.h"
 
 #include <Graphics/2D_Renderer.h>
 

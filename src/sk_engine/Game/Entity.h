@@ -6,40 +6,6 @@
 // entity tag, entity can have multiple tag
 enum etag : uint64_t {
 
-    // for physic
-    PHY_SOLID,
-    PHY_ACTOR,
-    PHY_TRIGGER,
-    PHY_ONE_WAY, //should be solid, only work in upward direction(for now)
-
-    PHY_DIR_U, // for one way body, this can change how trigger work, dont use for entity 
-    PHY_DIR_D,
-    PHY_DIR_L,
-    PHY_DIR_R,
-
-    DIR_U, // for special entity that need direction tag
-    DIR_D,
-    DIR_L,
-    DIR_R,
-
-    PHY_MOVEABLE, // only physic body with this tag will be query and updated, all actor is moveable
-
-    GROUND,
-
-    // each entity should not share tag
-    SPAWN_POINT,
-    AREA_FINISH,
-    PLAYER,
-    DASH_CRYSTAL,
-    SPRING,
-    FISH_BISCUIT,
-
-    PLATFORM_CRUMBLE,
-    DREAM_BLOCK,
-
-    LEVEL_TRANS_FORCE_UP, // push player upward when transtion to an upper level
-
-    DAMAGE
 };
 inline bool CheckTag(uint64_t i, int tag) {
     return ((i >> tag) & 1) != 0;

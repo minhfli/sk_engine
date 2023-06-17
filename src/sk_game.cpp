@@ -4,6 +4,9 @@
 #include <sk_engine/Common/sk_time.h>
 #include <sk_engine/Audio/skAudio.h>
 
+#include <sk_engine/Physics/AABB.h>
+
+
 #include <entt/entt.hpp>
 
 #include <iostream>
