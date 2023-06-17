@@ -6,6 +6,8 @@
 
 #include <sk_engine/Physics/AABB.h>
 
+#include <ImGUI/imgui.h>
+
 
 #include <entt/entt.hpp>
 
@@ -26,25 +28,14 @@ namespace sk_game {
 
         float camsize = 11.25f;
 
+        bool draw = true;
         sk_graphic::Sprite2D sprite;
     }
-    enum class GameState {
-        NONE,
-
-        SPLASH_SCREEN,
-
-        MENU_MAIN,
-        MENU_OPTION,
-
-        GAME_PLAY
-
-    }game_state;
 
     void Init() {
         cam = sk_graphic::Renderer2D_GetCam();
         cam->ProjectionO(camsize, 1280, 720);
         cam->position = glm::vec3(0.0f, 0.0f, 0.0f);
-
     }
 
     void Start() {
@@ -67,6 +58,10 @@ namespace sk_game {
             camsize += 10 * sk_time::delta_time;
             cam->ProjectionO(camsize, 1280, 720);
         }
+        if (sk_input::Key(sk_key::KP_1)) cam->position.x -= 1;
+        if (sk_input::Key(sk_key::KP_3)) cam->position.x += 1;
+        if (sk_input::Key(sk_key::KP_2)) cam->position.y -= 1;
+        if (sk_input::Key(sk_key::KP_5)) cam->position.y += 1;
     }
     //? normal update, call before draw
     void UpdateN() {
@@ -82,12 +77,19 @@ namespace sk_game {
     }
 
     void Draw() {
+
+        //ImGUI draw
+        ImGui::Begin("MyWindow");
+        ImGui::Checkbox("Boolean property", &draw);
+        ImGui::End();
+
+                // 
         glm::vec3 mouse_world_pos = cam->Screen_To_World(sk_input::MousePos(), glm::vec2(1280, 720));
         sk_graphic::Renderer2D_AddDotX(mouse_world_pos);
 
         cam->Draw();
 
-        sprite.Draw(glm::vec2(0), 0);
+        if (draw)sprite.Draw(glm::vec2(0), 0);
         //test_level::Draw();
         //GameArea.Draw();
     }

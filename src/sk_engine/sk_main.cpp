@@ -63,13 +63,14 @@ namespace sk_main {
                 }
 
                 sk_window::Process_event();
-                sk_window::Clear();
 
+                sk_window::BeginFrame();
                 sk_graphic::Renderer2D_Begin();
+
                 sk_game::GameLoop();
 
                 sk_graphic::Renderer2D_End();
-                sk_window::Swapbuffer();
+                sk_window::EndFrame();
             }
         }
         sk_game::Stop();

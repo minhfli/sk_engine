@@ -15,6 +15,9 @@ namespace sk_window {
 
     void Process_event();
     bool Should_close();
+
+    void BeginFrame();
+    void EndFrame();
     void Clear();
     void Swapbuffer();
 }
