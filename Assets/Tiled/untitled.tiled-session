@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "TileSet.tsx": {
+            "scaleInDock": 8,
+            "scaleInEditor": 2
+        },
+        "untitled.tmj": {
+            "expandedGroupLayers": [
+                3
+            ],
+            "scale": 5.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 108.18181818181819,
+                "y": 72.18181818181819
+            }
+        }
+    },
+    "last.imagePath": "D:/coding/C++/game projects/GLAD_test/Assets",
+    "map.lastUsedFormat": "json",
+    "map.renderOrder": null,
+    "map.tileHeight": 8,
+    "map.tileWidth": 8,
+    "openFiles": [
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "TileSet.tsx",
+        "untitled.tmj"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 8,
+        "width": 8
+    }
+}

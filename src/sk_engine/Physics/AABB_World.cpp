@@ -8,7 +8,7 @@
 
 #include <Graphics/2D_Renderer.h>
 
-#include <Common/sk_time.h>
+#include <Core/sk_time.h>
 
 namespace sk_physic2d {
 

@@ -4,7 +4,7 @@
 
 #include <sk_engine/Graphics/Graphics.h>
 
-#include <sk_engine/Common/sk_time.h>
+#include <sk_engine/Core/sk_time.h>
 
 #include <algorithm>
 

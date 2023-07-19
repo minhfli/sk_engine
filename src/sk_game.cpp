@@ -1,7 +1,7 @@
 #include "sk_game.h"
 #include <sk_engine/Graphics/Graphics.h>
 #include <sk_engine/Window/Input.h>
-#include <sk_engine/Common/sk_time.h>
+#include <sk_engine/Core/sk_time.h>
 #include <sk_engine/Audio/skAudio.h>
 
 #include <sk_engine/Physics/AABB.h>
@@ -12,6 +12,8 @@
 #include <entt/entt.hpp>
 
 #include <iostream>
+
+#include <game/Box2dTest.h>
 /*
     WRITE ALL GAME LOGIC HERE
     all update and draw funtion is called in gameloop function in sk_engine/sk_main.cpp
@@ -30,6 +32,17 @@ namespace sk_game {
 
         bool draw = true;
         sk_graphic::Sprite2D sprite;
+
+        entt::registry ENTT_RES;
+
+        entt::entity e1, e2, e3;
+
+        struct c1 {
+            int x, y;
+        };
+        struct c2 {
+            int a, b;
+        };
     }
 
     void Init() {
@@ -39,15 +52,12 @@ namespace sk_game {
     }
 
     void Start() {
-        //test_level::Start();
-        //GameArea.Init();
-        //GameArea.Start();
-
         sk_graphic::Texture2D tex;
         tex.Load("Assets/error.png");
         sprite.LoadTexture(tex, glm::vec2(2));
-    }
 
+        b2_test::Setup();
+    }
     //! update cam size and positon, temporary
     void UpdateCam() {
         if (sk_input::Key(sk_key::KP_4)) {
@@ -68,12 +78,12 @@ namespace sk_game {
         //! update cam size and positon, temporary
         UpdateCam();
         cam->Update();
-        //test_level::Update();
-        //GameArea.Update();
+
+        b2_test::Update();
+
     }
     //? late update, call after draw
     void UpdateL() {
-        //GameArea.LateUpdate();
     }
 
     void Draw() {
@@ -83,15 +93,15 @@ namespace sk_game {
         ImGui::Checkbox("Boolean property", &draw);
         ImGui::End();
 
-                // 
+
         glm::vec3 mouse_world_pos = cam->Screen_To_World(sk_input::MousePos(), glm::vec2(1280, 720));
         sk_graphic::Renderer2D_AddDotX(mouse_world_pos);
 
         cam->Draw();
 
-        if (draw)sprite.Draw(glm::vec2(0), 0);
-        //test_level::Draw();
-        //GameArea.Draw();
+        if (draw)sprite.Draw(glm::vec2(0), 0, glm::vec2(0.5f));
+
+        b2_test::Draw();
     }
 
     void GameLoop() {
@@ -102,8 +112,6 @@ namespace sk_game {
 
     //? call when game stop, use to free data, save, ....
     void Stop() {
-        //test_level::Stop();
-        //GameArea.Stop();
-        //GameArea.Destroy();
+
     }
 }

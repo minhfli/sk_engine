@@ -1,7 +1,7 @@
 #include "sk_main.h"
 #include <sk_game.h>
 
-#include "Common/sk_time.h"
+#include "Core/sk_time.h"
 
 #include "Graphics/Camera.h"
 #include "Graphics/2D_Renderer.h"

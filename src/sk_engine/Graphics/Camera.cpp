@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 #include "2D_Renderer.h"
-#include <Common/sk_time.h>
+#include <Core/sk_time.h>
 #include <iostream>
 #include <algorithm>
 

@@ -20,21 +20,35 @@ SRC = $(call rwildcard,src,*.cpp)
 OBJS = $(addprefix $(DIR_OBJ)/, $(SRC:cpp=o)) # obj/xxx.o obj/folder/xxx .o
 INC_DIRS = -Isrc -Ivendor/include -Isrc/sk_engine
 
+DEFINE =
+
 LIBS = 
 LIB_DIRS = 
-#* SDL flags
+
+#* Box2D 
+LIB_DIRS += -Lvendor/lib/BOX2D
+LIBS     += -lbox2d
+
+#* SDL 
 LIB_DIRS += -Lvendor/lib/SDL2
 LIBS     += -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer
 
-#* GLAD flags
+#* GLAD 
 LIB_DIRS += -Lvendor/lib/GLAD
-LIBS     +=  -lglad -lopengl32
+LIBS     += -lglad -lopengl32
 
-#* STB_IMAGE flags
+#* STB_image
 LIB_DIRS += -Lvendor/lib/STB
-LIBS     +=  -lstb_image
+LIBS     += -lstb_image
 
-#* GLM flags
+#* EntityX 
+LIB_DIRS += -Lvendor/lib/ENTITYX
+LIBS     += -lentityx
+
+
+#* EnTT
+#* GLM 
+
 .PHONY: all 
 all: compile run
 
@@ -51,7 +65,7 @@ DEPS=$(OBJS:.o=.d)
 
 $(DIR_OBJ)/%.o: %.cpp 
 	powershell mkdir -Force $(subst /,\,$(@D))
-	$(CC) -o $@ $(CFLAGS) -c $< $(INC_DIRS)
+	$(CC) -o $@ $(CFLAGS) $(DEFINE) -c $< $(INC_DIRS)
 	@echo "$(patsubst %.o,%.d,$@)"
 
 
