@@ -1,4 +1,7 @@
 
+(pixel perfect physic2d branch) 
+    pixel perfect physic
+    is no longer continued, sk engine will now use box2d for physic system 
 
 sk engine is a simple 2d game engine using sdl and opengl written my Mr. MinhFli(me)
 
