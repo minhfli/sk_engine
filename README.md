@@ -2,6 +2,8 @@
 
 sk engine is a simple 2d game framework using sdl and opengl written my MinhFli (me)
 
+sk engine is being developed parallel with 
+
 ## Third party library used:
 
     SDL2:               for window and opengl
