@@ -1,6 +1,8 @@
 SHELL := pwsh.exe
 
-TARGET = MyGame
+GAME ?= Box2dTest
+
+TARGET = $(GAME)
 
 CC = g++
 CFLAGS = -std=c++17 -Wall -pedantic -MMD -MP -mwindows
@@ -15,7 +17,8 @@ DIR_SRC = ./obj
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
 INCS = 
-SRC = $(call rwildcard,src,*.cpp)
+# SRC = $(call rwildcard,src,*.cpp)
+SRC = $(call rwildcard,src/sk_engine,*.cpp) $(call rwildcard,src/game/$(GAME),*.cpp)
 #NODIR_SRC = $(notdir $(SRC))
 OBJS = $(addprefix $(DIR_OBJ)/, $(SRC:cpp=o)) # obj/xxx.o obj/folder/xxx .o
 INC_DIRS = -Isrc -Ivendor/include -Isrc/sk_engine

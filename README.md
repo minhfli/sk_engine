@@ -1,38 +1,55 @@
+# SK(y) engine
 
+sk engine is a simple 2d game framework using sdl and opengl written my MinhFli (me)
 
-sk engine is a simple 2d game engine using sdl and opengl written my Mr. MinhFli(me)
-
-Third party library used:
+## Third party library used:
 
     SDL2:               for window and opengl
     GLAD:               for opengl
     STB_IMAGE:          load .png files
     NLOHMANN_JSON:      load .json files
     GLM:                math library
-    ENTT:               ECS 
+    ENTT:               ECS # currently not used
 
-sk_engine's modules:
+## To run game:
 
-    graphics:   
+make your game folder in src/game/
 
-        -simple opengl 2d renderer, can draw textured quad and line
-    
-    physic2d:   
+make a cpp file, include game.h and define all game.h's functions's logic
 
-        -2d physic implementation, based on celeste and towerdall physic: https://www.mattmakesgames.com/articles/celeste_and_towerfall_physics/index.html, for narrow phase collision detection (src/sk_engine/Physics/AABB_World_resolve.cpp)
+    # compile and run:
+    make all GAME=your_game
 
-        -Quad tree for broad phase collision detection (src/sk_engine/Physics/AABB_QuadTree.cpp)
+## sk_engine's modules:
 
-    window:
+### graphics:
 
-        -simple sdl wrapper for windowing
-    
-    audio:
-    
-        -simple sdl_mixxer wrapper for audio
-    
-    common: 
-    
-        -timer
-        -readfile
-        -handle error
+simple opengl 2d renderer, can draw textured quad and line
+
+#### window:
+
+simple sdl wrapper for windowing
+
+### physic2d:
+
+#### pixel perfect:
+
+2d physic implementation, based on celeste and towerdall physic: https://www.mattmakesgames.com/articles/celeste_and_towerfall_physics/index.html, for narrow phase collision detection (src/sk_engine/Physics/AABB_World_resolve.cpp)
+
+Quad tree for broad phase collision detection (src/sk_engine/Physics/AABB_QuadTree.cpp)
+
+#### box2d: (in development)
+
+wrapper of box2d
+
+### audio:
+
+simple sdl_mixxer wrapper for audio
+
+### common:
+
+timer
+
+readfile
+
+handle error

@@ -1,5 +1,5 @@
 #include "sk_main.h"
-#include <sk_game.h>
+#include <game/sk_game.h>
 
 #include "Core/sk_time.h"
 
