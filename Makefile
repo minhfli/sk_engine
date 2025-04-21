@@ -1,8 +1,8 @@
 SHELL := pwsh.exe
 
 GAME ?= Box2dTest
-
-TARGET = $(GAME)
+NAME ?= $(GAME)
+TARGET = $(NAME)
 
 CC = g++
 CFLAGS = -std=c++17 -Wall -pedantic -MMD -MP -mwindows

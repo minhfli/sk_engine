@@ -13,12 +13,12 @@ sk engine is a simple 2d game framework using sdl and opengl written my MinhFli 
 
 ## To run game:
 
-make your game folder in src/game/
+make your game folder in src/game/{game_src}
 
 make a cpp file, include game.h and define all game.h's functions's logic
 
-    # compile and run:
-    make all GAME=your_game
+    # compile and run: (if you dont provide game's name, it will use GAME as name)
+    make all GAME=game_src NAME=your_game_name
 
 ## sk_engine's modules:
 
