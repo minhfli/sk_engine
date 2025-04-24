@@ -1,17 +1,19 @@
-sk_engine 
-sk_graphic
+# sk_engine/sk_graphic
 
 this folder contain some opengl classes and a 2d sprite-batch and line renderer
 
 note that all texture, window, sprite, postion,... is mapped from lower-left (0,0) to upper-right (1,1)
+## Noise
+see common/noise
 
-2d sprite batch renderer implementation:
+## 2d sprite batch renderer implementation:
 
+  
     only 1 active texture
     when a quad with new texture is added, flush all quad with old texture
     
     you will want to minimize draw calls
-    -> try to draw quads with same texture continuously
+    -> try to draw quads with same texture continuously, like using tilemap with same sprite sheet
     
     even if you draw 1 one texute at a time, it still pretty fast
     testing result: (only draw, no game logic)
