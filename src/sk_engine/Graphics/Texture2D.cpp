@@ -61,6 +61,36 @@ namespace sk_graphic {
         //return ID;
     }
 
+    void Texture2D::Load(const int width, const int height, const int channels, const unsigned char* data) {
+        glGenTextures(1, &this->ID);
+                //texture_id[path] = ID;
+        glBindTexture(GL_TEXTURE_2D, this->ID);
+        std::cout << width << " " << height << " " << channels << " " << ID << '\n';
+        //? texture settings
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        //? copy image data to texture
+        if (channels == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        }
+        else if (channels == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        }
+        else if (channels == 1) {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_RED);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+        }
+        else {
+            FatalError("Texture2D::Load: Unknown channel count");
+        }
+
+        this->size.x = (float)width;
+        this->size.y = (float)height;
+    }
     void Texture2D::Bind(GLuint slot) {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, ID);
