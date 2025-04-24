@@ -23,6 +23,7 @@ namespace sk_graphic {
          * @param height Height of the tilemap in tiles
          * @param depth Depth of the tilemap, default is 0
          * @param tile_size Size of each tile in world units
+         * @param tile_gap Gap between tiles in world units
          * @param position Position of the tilemap in world units
          * @param pivot Pivot of the tilemap, default is center
          * @param parallax If true, the tilemap will move with the camera

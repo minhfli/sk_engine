@@ -23,6 +23,7 @@ namespace sk_graphic {
         this->height = height;
         this->depth = depth;
         this->tile_size = tile_size;
+        this->tile_gap = tile_gap;
         this->position = position;
         this->pivot = pivot;
         this->parallax = parallax;
