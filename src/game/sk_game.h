@@ -18,9 +18,14 @@ namespace sk_game {
     void OnBeginLoop();
     void OnEndLoop();
 
-    void UpdateN();
-    void UpdateL();
+    //? Normal update, called before draw
+    void Update();
+    //? Fixed update, called every fixed time step, currently not implemented
+    void UpdateFixed();
+    //? Late update, called after draw
+    void UpdateLate();
 
+    //? Draw function, called every frame
     void Draw();
 
 

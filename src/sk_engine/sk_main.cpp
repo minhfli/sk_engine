@@ -85,9 +85,4 @@ namespace sk_main {
         SDL_Quit();
     }
 
-    void GameLoop() {
-        sk_game::UpdateN();
-        sk_game::Draw();
-        sk_game::UpdateL();
-    }
 }
