@@ -3,6 +3,8 @@ sk_graphic
 
 this folder contain some opengl classes and a 2d sprite-batch and line renderer
 
+note that all texture, window, sprite, postion,... is mapped from lower-left (0,0) to upper-right (1,1)
+
 2d sprite batch renderer implementation:
 
     only 1 active texture
@@ -31,6 +33,8 @@ this folder contain some opengl classes and a 2d sprite-batch and line renderer
 
     gl depth test is enabled
     only use texture with pixel alpha alway equal 0 or 1,
+
+    semi transparent images, special shader effects should be rendered into textures then mixed together (these will be implemented in the future) 
 
 
 
