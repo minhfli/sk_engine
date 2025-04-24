@@ -2,7 +2,9 @@
 
 this folder contain some opengl classes and a 2d sprite-batch and line renderer
 
-note that all texture, window, sprite, postion,... is mapped from lower-left (0,0) to upper-right (1,1)
+note that 
+    - window, sprite, postion, renderer,... are mapped from lower-left (0,0) to upper-right (1,1)
+    - but texture is mapped from upper-left (0,0) to lower-right (0,0)
 ## Noise
 see common/noise
 
