@@ -9,7 +9,7 @@
 #include <ImGUI/imgui.h>
 
 #include <sk_engine/Graphics/Common/Noise/Noise.h>
-#include <sk_engine/Graphics/Common/Noise/PerlinNoise.h>
+
 
 #include <iostream>
 
@@ -33,7 +33,7 @@ namespace sk_game {
         sk_graphic::Sprite2D sprite;
         sk_graphic::Tilemap2D tilemap;
 
-        sk_graphic::PerlinNoise noise;
+        sk_graphic::Sprite2D noise_sprite[3];
     }
 
     void Init() {
@@ -53,8 +53,16 @@ namespace sk_game {
             for (int j = 0; j < 100; j++)
                 tilemap.SetTile(i, j, sprite);
 
-        tex = noise.genTexture(100, 100);
-        sprite.LoadTexture(tex, glm::vec2(5));
+
+        sk_graphic::RandomNoise R_noise(0, 8);
+        sk_graphic::ValueNoise V_noise(0, 8);
+        sk_graphic::PerlinNoise P_noise(0, 8);
+        tex = R_noise.genTexture(160, 160);
+        noise_sprite[0].LoadTexture(tex, glm::vec2(10));
+        tex = V_noise.genTexture(160, 160);
+        noise_sprite[1].LoadTexture(tex, glm::vec2(10));
+        tex = P_noise.genTexture(160, 160);
+        noise_sprite[2].LoadTexture(tex, glm::vec2(10));
 
     }
     //! update cam size and positon, temporary
@@ -101,7 +109,10 @@ namespace sk_game {
         cam->Draw();
 
         tilemap.Draw(glm::vec2(0), glm::vec4(1));
-        if (draw) sprite.Draw(glm::vec2(-0.5), 1, glm::vec2(0.5f));
+
+        noise_sprite[0].Draw(glm::vec2(-0.5, -0.5), 1, glm::vec2(0.5f));
+        noise_sprite[1].Draw(glm::vec2(10.5, -0.5), 1, glm::vec2(0.5f));
+        noise_sprite[2].Draw(glm::vec2(21.5, -0.5), 1, glm::vec2(0.5f));
 
     }
 
