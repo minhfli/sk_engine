@@ -50,8 +50,7 @@ namespace sk_physic2d {
             void Draw();
 
             bool TouchSolid_ibound(glm::ivec4 ibound);
-            // return true if there is a collider that have all tag in tag, and no tag in null_tag
-            bool BoxCast(glm::ivec4 ibound, uint64_t tag, uint64_t null_tag = 0);
+            bool BoxCast(glm::ivec4 ibound, uint8_t layers);
 
             private:
             std::vector <int> solids, actors;

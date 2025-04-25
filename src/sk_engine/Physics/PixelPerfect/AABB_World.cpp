@@ -83,9 +83,9 @@ namespace sk_physic2d {
             actors.clear();
             if (!m_Body.empty()) {
                 for (int i = 0; i <= m_Body.size() - 1;i++) {
-                    if (m_Body[i].is_active && CheckTag(m_Body[i].tag, PHY_MOVEABLE) && CheckTag(m_Body[i].tag, PHY_SOLID))
+                    if (m_Body[i].is_active && m_Body[i].type == Body_Type::MOVING_SOLID)
                         solids.push_back(i);
-                    if (m_Body[i].is_active && CheckTag(m_Body[i].tag, PHY_ACTOR))
+                    if (m_Body[i].is_active && m_Body[i].type == Body_Type::ACTOR)
                         actors.push_back(i);
                 }
             }
@@ -96,10 +96,10 @@ namespace sk_physic2d {
 
         //* check touching and raycasting --------------------------------------------------------------------------------------
 
-        bool AABB_World::BoxCast(glm::ivec4 ibound, uint64_t tag, uint64_t null_tag) {
+        bool AABB_World::BoxCast(glm::ivec4 ibound, uint8_t layers) {
             auto possible_collision = Query(irect(ibound));
             for (int body_id : possible_collision)
-                if (m_Body[body_id].is_active && (m_Body[body_id].tag & tag) == tag && (m_Body[body_id].tag & null_tag) == 0)
+                if (m_Body[body_id].is_active && (m_Body[body_id].layer & layers) != 0)
                     return true;
             return 0;
         }

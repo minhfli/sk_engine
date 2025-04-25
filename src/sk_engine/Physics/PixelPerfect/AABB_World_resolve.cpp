@@ -1,11 +1,12 @@
 #include "AABB_World.h"
 
 #include "phy_tag.h"
-#include "Entity.h"
 
 #include <sk_engine/Graphics/Graphics.h>
 
 #include <sk_engine/Core/sk_time.h>
+#include "Collider.h"
+#include "Entity.h"
 
 #include <algorithm>
 
@@ -26,9 +27,9 @@ namespace sk_physic2d {
             for (int s_index : possible_collision) {
                 Body& s_body = m_Body[s_index];
                 if (!s_body.is_active) continue;
-                if ((a_body.ignore & s_body.tag)) continue; // check if ignore
-                if (!CheckTag(s_body.tag, ptag::PHY_SOLID)) continue;
-                if (CheckTag(s_body.tag, ptag::PHY_ONE_WAY)) continue;
+                if ((a_body.layer & s_body.layer) == 0) continue; // check if ignore
+                if (s_body.type != Body_Type::STATIC_SOLID && s_body.type != Body_Type::MOVING_SOLID) continue;
+                // if (CheckTag(s_body.tag, ptag::PHY_ONE_WAY)) continue;
                 if (force && a_body.entity != nullptr) {
                     //? a_body.entity->OnSquish();
                     return;
@@ -62,9 +63,9 @@ namespace sk_physic2d {
             for (int s_index : possible_collision) {
                 Body& s_body = m_Body[s_index];
                 if (!s_body.is_active) continue;
-                if ((a_body.ignore & s_body.tag)) continue; // check if ignore
-                if (!CheckTag(s_body.tag, ptag::PHY_SOLID)) continue;
-                if (CheckTag(s_body.tag, ptag::PHY_ONE_WAY) && a_body.RECT.bound.y < s_body.RECT.bound.w) continue;
+                if ((a_body.layer & s_body.layer) == 0) continue; // check if ignore
+                if (s_body.type != Body_Type::STATIC_SOLID && s_body.type != Body_Type::MOVING_SOLID) continue;
+                // if (CheckTag(s_body.tag, ptag::PHY_ONE_WAY) && a_body.RECT.bound.y < s_body.RECT.bound.w) continue;
                 //? if (force && a_body.entity != nullptr) { a_body.entity->OnSquish(); return; }
                 int distant = std::max(
                     a_body.RECT.bound.y - s_body.RECT.bound.w,
@@ -98,7 +99,8 @@ namespace sk_physic2d {
             for (int a_index : possible_collision) {
                 Body& a_body = m_Body[a_index];
                 if (!a_body.is_active) continue;
-                if (!CheckTag(a_body.tag, ptag::PHY_ACTOR)) continue;
+                if ((a_body.layer & s_body.layer) == 0) continue; // check if ignore
+                if (a_body.type != Body_Type::ACTOR) continue;
                 a_body.RECT.offset.x = s_body.RECT.offset.x;
                 if (x_move > 0)                         // push actor
                     MoveActorX(a_body, query_rect.bound.z - a_body.RECT.bound.x, true);
@@ -123,7 +125,8 @@ namespace sk_physic2d {
             for (int a_index : possible_collision) {
                 Body& a_body = m_Body[a_index];
                 if (!a_body.is_active) continue;
-                if (!CheckTag(a_body.tag, ptag::PHY_ACTOR)) continue;
+                if ((a_body.layer & s_body.layer) == 0) continue; // check if ignore
+                if (a_body.type != Body_Type::ACTOR) continue;
                 a_body.RECT.offset.y = s_body.RECT.offset.y;
                 if (y_move > 0)                         // push actor
                     MoveActorY(a_body, query_rect.bound.w - a_body.RECT.bound.y, true);
@@ -143,25 +146,26 @@ namespace sk_physic2d {
                     sk_graphic::Renderer2D_AddBBox(m_Body[index].RECT.true_bound(), 2, { 1,1,1,1 });
             if (a_body.entity != nullptr) for (int index : possible_collision) {
                 Body& t_body = m_Body[index];
-                if ((a_body.ignore & t_body.tag)) continue; // check if ignore
+                if ((a_body.layer & t_body.layer) == 0) continue; // check if ignore
                 if (!t_body.is_active) continue;
-                if (CheckTag(t_body.tag, ptag::PHY_TRIGGER)) { // check trigger
-                    if (CheckTag(t_body.tag, ptag::PHY_DIR_U) && a_body.velocity.y > 0) continue;
-                    if (CheckTag(t_body.tag, ptag::PHY_DIR_D) && a_body.velocity.y < -1) continue;
-                    if (CheckTag(t_body.tag, ptag::PHY_DIR_L) && a_body.velocity.x < 0) continue;
-                    if (CheckTag(t_body.tag, ptag::PHY_DIR_R) && a_body.velocity.x > 0) continue;
-                    /*if (id != index) {
-                        a_body.entity->OnTrigger(t_body.tag);
+                if (t_body.type == Body_Type::TRIGGER) { // check trigger
+                    if (t_body.direction == Direction_tag::U && a_body.velocity.y >= 0) continue;
+                    if (t_body.direction == Direction_tag::D && a_body.velocity.y <= 0) continue;
+                    if (t_body.direction == Direction_tag::L && a_body.velocity.x <= 0) continue;
+                    if (t_body.direction == Direction_tag::R && a_body.velocity.x >= 0) continue;
+                    if (id != index) {
+                        a_body.entity->onTrigger(t_body);
                         if (t_body.entity) {
-                            a_body.entity->OnTrigger(t_body.entity);
-                            t_body.entity->OnTrigger(a_body.entity);
-                            t_body.entity->OnTrigger(a_body.tag);
+                            a_body.entity->onTrigger(t_body);
+                            t_body.entity->onTrigger(t_body);
+                            t_body.entity->onTrigger(t_body);
                         }
-                    }*/
+                    }
                     continue;
                 }
-                //?if (CheckTag(t_body.tag, ptag::PHY_SOLID) && !CheckTag(t_body.tag, ptag::PHY_ONE_WAY))
-                    //?a_body.entity->OnSquish();
+                if (t_body.type == Body_Type::MOVING_SOLID || t_body.type == Body_Type::STATIC_SOLID) {
+                    a_body.entity->onSquish();
+                }
             }
             //* movement ----------------------------------------------------------------------------------------------
             glm::vec2 move_amount =

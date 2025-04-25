@@ -2,12 +2,46 @@
 
 #include <GLM/glm.hpp>
 
-class Entity;
 
 namespace  sk_physic2d {
     namespace pixel_perfect {
+        class Entity;
 
-// some function for checking
+        // physic layer of physic body, a body can exist in multiple layers
+        // a body can only interact with other body if there is a layer match
+        constexpr uint8_t layer1 = 1;
+        constexpr uint8_t layer2 = 1 << 1;
+        constexpr uint8_t layer3 = 1 << 2;
+        constexpr uint8_t layer4 = 1 << 3;
+        constexpr uint8_t layer5 = 1 << 4;
+        constexpr uint8_t layer6 = 1 << 5;
+        constexpr uint8_t layer7 = 1 << 6;
+        constexpr uint8_t layer8 = 1 << 7;
+
+        enum class Body_Type :uint8_t {
+            /// @brief static solid, not moveable, not triggerable
+            STATIC_SOLID = 0,
+            /// @brief dynamic solid, moveable, move actors that collide with it
+            MOVING_SOLID = 1,
+            /// @brief dynamic actor, moveable, push actors that overlap with it
+            ACTOR = 2,
+            /// @brief trigger, not moveable, trigger other actors or triggers that overlap with it
+            TRIGGER = 3,
+        };
+        enum class Direction_tag :uint8_t {
+            NONE = 0,
+            // direction tag
+            // solid will only push actor if actor move in the opposite direction
+            // trigger will only trigger if actor move in the opposite direction
+            // for example, if actor move up, and solid has up tag, it will not collide with actor, 
+            // but if actor move down, it will collide with actor
+            U = 1, // up
+            D = 2, // down
+            L = 3, // left
+            R = 4, // right
+        };
+
+        // some function for checking   
         bool overlap(const glm::ivec4 a, const glm::ivec4 b);
         bool contain(const glm::ivec4 a, const glm::ivec4 b);
 
@@ -134,41 +168,48 @@ namespace  sk_physic2d {
 
         struct Body_Def {
             irect RECT;
-            uint64_t tag;
+            int weight = 1;
+            uint8_t layer;
+            Body_Type type = Body_Type::STATIC_SOLID;
+            Direction_tag direction = Direction_tag::NONE;
             Entity* entity;
 
             /// @param t collider type, 0:solid, 1:actor, 2:triggerer
             /// @param tg tag
-            Body_Def(irect r, uint64_t tg = 0, Entity* e = nullptr) :
+            Body_Def(irect r, int weight = 1, Body_Type t = Body_Type::STATIC_SOLID, Direction_tag dir = Direction_tag::NONE, uint8_t layer = layer1, Entity* e = nullptr) :
                 RECT(r),
-                tag(tg),
+                weight(weight),
+                type(t),
+                layer(layer),
+                direction(dir),
                 entity(e) {
             }
         };
         struct Body {
             public:
             bool is_active = false;
-            uint64_t tag; //physic body should have tag actor or moveable for physic system to update it position
-            uint64_t ignore = 0;
-
             irect RECT;
+            int weight = 1;
+            uint8_t layer;
+            Body_Type type = Body_Type::STATIC_SOLID;
+            Direction_tag direction = Direction_tag::NONE;
+            Entity* entity;
 
             // use for dynamic movement of physic body, should be 0 if use moveamount to move body
             glm::vec2 velocity = glm::vec2(0);
             // use for precise movement of phyisc body, reset every frame, should be 0 if use velocity to move body
             glm::vec2 move_amount = glm::vec2(0);
 
-            Entity* entity;
-
             Body() {}
             Body(Body_Def def) :
                 is_active(true),
-                tag(def.tag),
-                ignore(0),
                 RECT(def.RECT),
+                weight(def.weight),
+                layer(def.layer),
+                type(def.type),
+                direction(def.direction),
                 entity(def.entity) {
             }
-
             void set_moveto(glm::vec2 pivot, glm::vec2 target);
         };
 

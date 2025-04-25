@@ -13,10 +13,11 @@ namespace sk_physic2d {
             Entity() = default;
             ~Entity() = default;
 
-            virtual void onCollision(const Body& other) {}
-            virtual void onTrigger(const Body& other) {}
-            virtual void onSquish() {}
-            virtual void onRiding(const Body& other) {}
+            uint32_t tag = 0;
+            virtual void onCollision(const Body& other) {};
+            virtual void onTrigger(const Body& other) {};
+            virtual void onSquish() {};
+            virtual void onRiding(const Body& other) {};
 
         };
     }
