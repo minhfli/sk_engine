@@ -8,7 +8,7 @@
 
 #include <ImGUI/imgui.h>
 
-#include <sk_engine/Graphics/Common/Noise/Noise.h>
+#include <sk_engine/Core/Math/Noise/Noise.h>
 
 #include <sk_engine/Physics/PixelPerfect/AABB.h>
 
@@ -47,16 +47,16 @@ namespace sk_game {
 
         Player player;
 
-        sk_graphic::NoiseMap genPerlinSprite() {
-            sk_graphic::ValueNoise noise1(0, 4);
-            sk_graphic::ValueNoise noise2(0, 8);
-            sk_graphic::ValueNoise noise3(0, 16);
-            sk_graphic::ValueNoise noise4(0, 32);
-            sk_graphic::NoiseMap noise_map1 = noise1.toNoiseMap(noise_map_size, noise_map_size);
-            sk_graphic::NoiseMap noise_map2 = noise2.toNoiseMap(noise_map_size, noise_map_size);
-            sk_graphic::NoiseMap noise_map3 = noise3.toNoiseMap(noise_map_size, noise_map_size);
-            sk_graphic::NoiseMap noise_map4 = sk_graphic::addNoiseMap(noise_map1, noise_map2);
-            sk_graphic::NoiseMap noise_map5 = sk_graphic::addNoiseMap(noise_map3, noise_map4);
+        sk_math::NoiseMap genPerlinSprite() {
+            sk_math::ValueNoise noise1(0, 4);
+            sk_math::ValueNoise noise2(0, 8);
+            sk_math::ValueNoise noise3(0, 16);
+            sk_math::ValueNoise noise4(0, 32);
+            sk_math::NoiseMap noise_map1 = noise1.toNoiseMap(noise_map_size, noise_map_size);
+            sk_math::NoiseMap noise_map2 = noise2.toNoiseMap(noise_map_size, noise_map_size);
+            sk_math::NoiseMap noise_map3 = noise3.toNoiseMap(noise_map_size, noise_map_size);
+            sk_math::NoiseMap noise_map4 = sk_math::addNoiseMap(noise_map1, noise_map2);
+            sk_math::NoiseMap noise_map5 = sk_math::addNoiseMap(noise_map3, noise_map4);
             sk_graphic::Texture2D tex1 = noise_map1.toTexture();
             sk_graphic::Texture2D tex2 = noise_map2.toTexture();
             sk_graphic::Texture2D tex3 = noise_map3.toTexture();
@@ -67,11 +67,11 @@ namespace sk_game {
             noise_sprite2[2].LoadTexture(tex3, glm::vec2(10));
             noise_sprite2[3].LoadTexture(tex4, glm::vec2(10));
             noise_sprite2[4].LoadTexture(tex5, glm::vec2(10));
-            sk_graphic::NoiseMap noise_map6 = noise_map1.filterBlackWhite(128, 256);
-            sk_graphic::NoiseMap noise_map7 = noise_map2.filterBlackWhite(128, 256);
-            sk_graphic::NoiseMap noise_map8 = noise_map3.filterBlackWhite(128, 256);
-            sk_graphic::NoiseMap noise_map9 = noise_map4.filterBlackWhite(128, 256, true);
-            sk_graphic::NoiseMap noise_map10 = noise_map5.filterBlackWhite(128, 256, true);
+            sk_math::NoiseMap noise_map6 = noise_map1.filterBlackWhite(128, 256);
+            sk_math::NoiseMap noise_map7 = noise_map2.filterBlackWhite(128, 256);
+            sk_math::NoiseMap noise_map8 = noise_map3.filterBlackWhite(128, 256);
+            sk_math::NoiseMap noise_map9 = noise_map4.filterBlackWhite(128, 256, true);
+            sk_math::NoiseMap noise_map10 = noise_map5.filterBlackWhite(128, 256, true);
             sk_graphic::Texture2D tex6 = noise_map6.toTexture();
             sk_graphic::Texture2D tex7 = noise_map7.toTexture();
             sk_graphic::Texture2D tex8 = noise_map8.toTexture();
@@ -97,15 +97,14 @@ namespace sk_game {
         physic_world.enable_debug_draw = true;
 
         player.Init(&physic_world, cam);
-
     }
 
     void Start() {
         sk_graphic::Texture2D tex;
 
-        sk_graphic::RandomNoise R_noise(0, 8);
-        sk_graphic::ValueNoise V_noise(0, 8);
-        sk_graphic::PerlinNoise P_noise(0, 8);
+        sk_math::RandomNoise R_noise(0, 8);
+        sk_math::ValueNoise V_noise(0, 8);
+        sk_math::PerlinNoise P_noise(0, 8);
         tex = R_noise.genTexture(noise_map_size, noise_map_size);
         noise_sprite[0].LoadTexture(tex, glm::vec2(10));
         tex = V_noise.genTexture(noise_map_size, noise_map_size);
@@ -113,14 +112,19 @@ namespace sk_game {
         tex = P_noise.genTexture(noise_map_size, noise_map_size);
         noise_sprite[2].LoadTexture(tex, glm::vec2(10));
 
-        sk_graphic::NoiseMap selected_noise_map = genPerlinSprite();
+        sk_math::NoiseMap selected_noise_map = genPerlinSprite();
+        // int * a =new int1
+        // int1 * b 
+        // a.zy -> a 
+
+        // ((int1*) a)->zy ->b 
 
         tex.Load("Assets/error.png");
         sprite.LoadTexture(tex, glm::vec2(1));
 
 
-        Bitset2D bitset = selected_noise_map.filter(128, 256, true);
-        Bitset2D bitset2 = selected_noise_map.filter(64, 256, true);
+        sk_math::Bitset2D bitset = selected_noise_map.filter(128, 256, true);
+        sk_math::Bitset2D bitset2 = selected_noise_map.filter(64, 256, true);
 
         tilemap.Init(noise_map_size, noise_map_size, 0, glm::vec2(1), glm::vec2(0), glm::vec2(0), glm::vec2(0.5f));
         for (int i = 0; i < noise_map_size; i++)

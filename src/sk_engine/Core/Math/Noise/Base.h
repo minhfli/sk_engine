@@ -6,7 +6,7 @@
 #include <sk_engine/Graphics/Texture2D.h>
 #include "NoiseMap.h"
 
-namespace sk_graphic {
+namespace sk_math {
     enum class NoiseType {
         NONE,
         RANDOM,
@@ -42,7 +42,7 @@ namespace sk_graphic {
         }
 
         /// @brief generate a texture from the noise, you can use this texture to display
-        Texture2D genTexture(const int height, const int width);
+        sk_graphic::Texture2D genTexture(const int height, const int width);
 
         /// @brief generate a 2D array of noise value, in range [0, 256] * scale, only use at startup, because it might be slow
         virtual std::vector<std::vector<float>> genNoiseMap255(const int height, const int width, const float scale = 1.0f);

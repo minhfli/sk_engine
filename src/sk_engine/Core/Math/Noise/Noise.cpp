@@ -12,7 +12,8 @@
 
 constexpr double M_PI = 3.14159265358979323846;
 
-namespace sk_graphic {
+
+namespace sk_math {
     namespace {
         std::hash<int> int_hasher;
         uint32_t hash(int y, int x, int seed = 0) {
@@ -32,7 +33,7 @@ namespace sk_graphic {
         }
     }
 #pragma region BaseNoise
-    Texture2D Noise::genTexture(const int height, const int width) {
+    sk_graphic::Texture2D Noise::genTexture(const int height, const int width) {
         unsigned char* data = new unsigned char[width * height * sizeof(unsigned char)];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -52,7 +53,7 @@ namespace sk_graphic {
                 // data[3 * (y * width + x) + 2] = (value & 0x0000FF);
             }
         }
-        Texture2D texture;
+        sk_graphic::Texture2D texture;
         texture.Load(width, height, 1, data);
         return texture;
     }

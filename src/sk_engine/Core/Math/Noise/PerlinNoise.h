@@ -4,7 +4,7 @@
 
 #include "Base.h"
 
-namespace sk_graphic {
+namespace sk_math {
     class PerlinNoise : public Noise {
         public:
         PerlinNoise(int seed = 0, int samples = 16) : Noise(seed, samples) {

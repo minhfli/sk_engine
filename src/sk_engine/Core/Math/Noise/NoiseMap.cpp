@@ -1,7 +1,7 @@
 #include "NoiseMap.h"
 
-namespace sk_graphic {
-    Texture2D NoiseMap::toTexture() {
+namespace sk_math {
+    sk_graphic::Texture2D NoiseMap::toTexture() {
         unsigned char* data = new unsigned char[width * height * sizeof(unsigned char)];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -10,7 +10,7 @@ namespace sk_graphic {
                 data[(y * width + x) + 0] = valueC;
             }
         }
-        Texture2D texture;
+        sk_graphic::Texture2D texture;
         texture.Load(width, height, 1, data);
         return texture;
     }

@@ -3,9 +3,9 @@
 #include <stdexcept>
 
 #include <sk_engine/Graphics/Texture2D.h>
-#include <sk_engine/Common/Bitset2D.h>
+#include <sk_engine/Core/Math/Bitset2D.h>
 
-namespace sk_graphic {
+namespace sk_math {
 
     /// @brief A class to represent a 2D noise, default range is [0, 256] (float) or [0, 255] (casted to uint8_t)
     class NoiseMap {
@@ -29,7 +29,7 @@ namespace sk_graphic {
         /// @brief Scale factor, used when adding noise maps together, then is divided when generating the texture
         float scale = 1.0f;
 
-        Texture2D toTexture();
+        sk_graphic::Texture2D toTexture();
 
         // aceess
         std::vector<float>& operator[](int i) {

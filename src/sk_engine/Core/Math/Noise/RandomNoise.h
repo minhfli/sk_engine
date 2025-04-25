@@ -5,7 +5,7 @@
 
 #include "Base.h"
 
-namespace sk_graphic {
+namespace sk_math {
     class RandomNoise : public Noise {
         public:
         RandomNoise(const int seed = 0, const int samples = 16) : Noise(seed, samples) {}
