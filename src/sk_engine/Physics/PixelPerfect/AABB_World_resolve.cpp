@@ -31,7 +31,8 @@ namespace sk_physic2d {
                 if (!s_body.is_active) continue;
                 if ((a_body.layer & s_body.layer) == 0) continue; // check if ignore
                 if (s_body.type != Body_Type::STATIC_SOLID && s_body.type != Body_Type::MOVING_SOLID) continue;
-                // if (CheckTag(s_body.tag, ptag::PHY_ONE_WAY)) continue;
+                if (s_body.direction == Direction_tag::L && s_body.RECT.bound.x < a_body.RECT.bound.z) continue;
+                if (s_body.direction == Direction_tag::R && s_body.RECT.bound.z > a_body.RECT.bound.x) continue;
                 if (force && a_body.entity != nullptr) {
                     //? a_body.entity->OnSquish();
                     return;
@@ -67,7 +68,8 @@ namespace sk_physic2d {
                 if (!s_body.is_active) continue;
                 if ((a_body.layer & s_body.layer) == 0) continue; // check if ignore
                 if (s_body.type != Body_Type::STATIC_SOLID && s_body.type != Body_Type::MOVING_SOLID) continue;
-                // if (CheckTag(s_body.tag, ptag::PHY_ONE_WAY) && a_body.RECT.bound.y < s_body.RECT.bound.w) continue;
+                if (s_body.direction == Direction_tag::U && s_body.RECT.bound.w > a_body.RECT.bound.y) continue;
+                if (s_body.direction == Direction_tag::D && s_body.RECT.bound.y < a_body.RECT.bound.w) continue;
                 //? if (force && a_body.entity != nullptr) { a_body.entity->OnSquish(); return; }
                 int distant = std::max(
                     a_body.RECT.bound.y - s_body.RECT.bound.w,
