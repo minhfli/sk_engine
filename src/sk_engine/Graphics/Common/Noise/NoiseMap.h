@@ -58,6 +58,13 @@ namespace sk_graphic {
         /// @return 
         NoiseMap filterValue(float lower, float upper, bool normalize = false);
 
+        /// @brief the value beetwen lower and upper will be set to 255, the rest will be set to 0
+        /// @param lower 
+        /// @param upper 
+        /// @param normalize 
+        /// @return 
+        NoiseMap filterBlackWhite(float lower, float upper, bool normalize = false);
+
         void add(const NoiseMap& other);
     };
 

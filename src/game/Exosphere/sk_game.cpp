@@ -34,6 +34,45 @@ namespace sk_game {
         sk_graphic::Tilemap2D tilemap;
 
         sk_graphic::Sprite2D noise_sprite[3];
+        sk_graphic::Sprite2D perlin_sprite[10];
+
+        void genPerlinSprite() {
+            sk_graphic::ValueNoise noise1(0, 4);
+            sk_graphic::ValueNoise noise2(0, 8);
+            sk_graphic::ValueNoise noise3(0, 16);
+            sk_graphic::ValueNoise noise4(0, 32);
+            sk_graphic::NoiseMap noise_map1 = noise1.toNoiseMap(160, 160);
+            sk_graphic::NoiseMap noise_map2 = noise2.toNoiseMap(160, 160);
+            sk_graphic::NoiseMap noise_map3 = noise3.toNoiseMap(160, 160);
+            sk_graphic::NoiseMap noise_map4 = sk_graphic::addNoiseMap(noise_map1, noise_map2);
+            sk_graphic::NoiseMap noise_map5 = sk_graphic::addNoiseMap(noise_map3, noise_map4);
+            sk_graphic::Texture2D tex1 = noise_map1.toTexture();
+            sk_graphic::Texture2D tex2 = noise_map2.toTexture();
+            sk_graphic::Texture2D tex3 = noise_map3.toTexture();
+            sk_graphic::Texture2D tex4 = noise_map4.toTexture();
+            sk_graphic::Texture2D tex5 = noise_map5.toTexture();
+            perlin_sprite[0].LoadTexture(tex1, glm::vec2(10));
+            perlin_sprite[1].LoadTexture(tex2, glm::vec2(10));
+            perlin_sprite[2].LoadTexture(tex3, glm::vec2(10));
+            perlin_sprite[3].LoadTexture(tex4, glm::vec2(10));
+            perlin_sprite[4].LoadTexture(tex5, glm::vec2(10));
+            sk_graphic::NoiseMap noise_map6 = noise_map1.filterBlackWhite(128, 256);
+            sk_graphic::NoiseMap noise_map7 = noise_map2.filterBlackWhite(128, 256);
+            sk_graphic::NoiseMap noise_map8 = noise_map3.filterBlackWhite(128, 256);
+            sk_graphic::NoiseMap noise_map9 = noise_map4.filterBlackWhite(128, 256, true);
+            sk_graphic::NoiseMap noise_map10 = noise_map5.filterBlackWhite(128, 256, true);
+            sk_graphic::Texture2D tex6 = noise_map6.toTexture();
+            sk_graphic::Texture2D tex7 = noise_map7.toTexture();
+            sk_graphic::Texture2D tex8 = noise_map8.toTexture();
+            sk_graphic::Texture2D tex9 = noise_map9.toTexture();
+            sk_graphic::Texture2D tex10 = noise_map10.toTexture();
+            perlin_sprite[5].LoadTexture(tex6, glm::vec2(10));
+            perlin_sprite[6].LoadTexture(tex7, glm::vec2(10));
+            perlin_sprite[7].LoadTexture(tex8, glm::vec2(10));
+            perlin_sprite[8].LoadTexture(tex9, glm::vec2(10));
+            perlin_sprite[9].LoadTexture(tex10, glm::vec2(10));
+
+        }
     }
 
     void Init() {
@@ -64,6 +103,7 @@ namespace sk_game {
         tex = P_noise.genTexture(160, 160);
         noise_sprite[2].LoadTexture(tex, glm::vec2(10));
 
+        genPerlinSprite();
     }
     //! update cam size and positon, temporary
     void UpdateCam() {
@@ -110,9 +150,11 @@ namespace sk_game {
 
         tilemap.Draw(glm::vec2(0), glm::vec4(1));
 
-        noise_sprite[0].Draw(glm::vec2(-0.5, -0.5), 1, glm::vec2(0.5f));
-        noise_sprite[1].Draw(glm::vec2(10.5, -0.5), 1, glm::vec2(0.5f));
-        noise_sprite[2].Draw(glm::vec2(21.5, -0.5), 1, glm::vec2(0.5f));
+        for (int i = 0; i < 3; i++)
+            noise_sprite[i].Draw(glm::vec2(-0.5 + i * 10, -0.5), 1, glm::vec2(0.5f));
+
+        for (int i = 0; i < 10; i++)
+            perlin_sprite[i].Draw(glm::vec2(-0.5 + i * 10, 10.5), 1, glm::vec2(0.5f));
 
     }
 

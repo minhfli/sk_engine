@@ -8,10 +8,10 @@ namespace sk_graphic {
     class PerlinNoise : public Noise {
         public:
         PerlinNoise(int seed = 0, int samples = 16) : Noise(seed, samples) {
-            initGradients();
+            // initGradients();
         }
         PerlinNoise(const std::string& seedStr, int samples = 16) : Noise(seedStr, samples) {
-            initGradients();
+            // initGradients();
         }
         ~PerlinNoise() = default;
 
@@ -19,12 +19,13 @@ namespace sk_graphic {
         float getValue01(int y, int x) override;
         float getValue255(int y, int x) override;
         public:
-        std::vector<std::vector<glm::vec2>> gradients;
+        // std::vector<std::vector<glm::vec2>> gradients;
 
         private:
-        void initGradients();
+        // void initGradients();
+        glm::vec2 getGradient(int ix, int iy) const;
 
-        // static float dotGridGradient(int ix, int iy, float x, float y, const std::vector<std::vector<glm::vec2>>& grads);
+        float dotGridGradient(int ix, int iy, float x, float y);
 
         float perlin(float x, float y);
 

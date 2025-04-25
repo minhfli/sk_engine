@@ -86,6 +86,31 @@ namespace sk_graphic {
         return result;
     }
 
+    NoiseMap NoiseMap::filterBlackWhite(float lower, float upper, bool normalize) {
+        size_t height = noise_map.size();
+        size_t width = noise_map[0].size();
+        NoiseMap result(height, width);
+
+        if (!normalize)
+            for (size_t i = 0; i < height; ++i) {
+                for (size_t j = 0; j < width; ++j) {
+                    float value = noise_map[i][j];
+                    if (value >= lower && value <= upper) {
+                        result.noise_map[i][j] = 255;
+                    }
+                }
+            }
+        else
+            for (size_t i = 0; i < height; ++i) {
+                for (size_t j = 0; j < width; ++j) {
+                    float value = noise_map[i][j] / scale;
+                    if (value >= lower && value <= upper) {
+                        result.noise_map[i][j] = 255;
+                    }
+                }
+            }
+        return result;
+    }
     void NoiseMap::add(const NoiseMap& other) {
         if (height != other.height || width != other.width) {
             throw std::invalid_argument("Noise maps must have the same dimensions to be added");

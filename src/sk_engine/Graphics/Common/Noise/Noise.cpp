@@ -145,24 +145,19 @@ namespace sk_graphic {
 #pragma region PerlinNoise
 
 
-    void PerlinNoise::initGradients() {
-        int gridSize = 512 / samples + 2;
-        gradients = std::vector<std::vector<glm::vec2>>(gridSize, std::vector<glm::vec2>(gridSize));
+    glm::vec2 PerlinNoise::getGradient(int x, int y) const {
         std::mt19937 rng(seed);
+        rng.seed(seed ^ (x * 374761393 + y * 668265263));
         std::uniform_real_distribution<float> dist(0.0f, 2 * M_PI);
-
-        for (int y = 0; y < gridSize; ++y) {
-            for (int x = 0; x < gridSize; ++x) {
-                float angle = dist(rng);
-                gradients[y][x] = { std::cos(angle), std::sin(angle) };
-            }
-        }
+        float angle = dist(rng);
+        return glm::vec2(std::cos(angle), std::sin(angle));
     }
 
-    static float dotGridGradient(int ix, int iy, float x, float y, const std::vector<std::vector<glm::vec2>>& grads) {
+    float PerlinNoise::dotGridGradient(int ix, int iy, float x, float y) {
         float dx = x - ix;
         float dy = y - iy;
-        glm::vec2 grad = grads[iy][ix];
+        glm::vec2 grad = getGradient(ix, iy);
+
         return dx * grad.x + dy * grad.y;
     }
 
@@ -175,12 +170,12 @@ namespace sk_graphic {
         float sx = fade(x - x0);
         float sy = fade(y - y0);
 
-        float n0 = dotGridGradient(x0, y0, x, y, gradients);
-        float n1 = dotGridGradient(x1, y0, x, y, gradients);
+        float n0 = dotGridGradient(x0, y0, x, y);
+        float n1 = dotGridGradient(x1, y0, x, y);
         float ix0 = lerp(n0, n1, sx);
 
-        n0 = dotGridGradient(x0, y1, x, y, gradients);
-        n1 = dotGridGradient(x1, y1, x, y, gradients);
+        n0 = dotGridGradient(x0, y1, x, y);
+        n1 = dotGridGradient(x1, y1, x, y);
         float ix1 = lerp(n0, n1, sx);
 
         return lerp(ix0, ix1, sy);
