@@ -1,4 +1,5 @@
 #include "Tilemap2D.h"
+#include <sk_engine/Graphics/2D_Renderer.h>
 
 namespace sk_graphic {
 
@@ -9,8 +10,8 @@ namespace sk_graphic {
     }
 
     void Tilemap2D::Init(
-        const int width,
         const int height,
+        const int width,
         const float depth,
         const glm::vec2 tile_size,
         const glm::vec2 tile_gap,
@@ -24,13 +25,13 @@ namespace sk_graphic {
         this->depth = depth;
         this->tile_size = tile_size;
         this->tile_gap = tile_gap;
-        this->position = position;
+        this->map_size = (tile_size + tile_gap) * glm::vec2(height, width);
+        this->position = position - map_size * pivot;
         this->pivot = pivot;
         this->parallax = parallax;
         this->parallax_speed = parallax_speed;
 
-        map_size.x = width * tile_size.x;
-        map_size.y = height * tile_size.y;
+
 
         tilemap.resize(height, std::vector<Sprite2D>(width));
 
@@ -51,11 +52,13 @@ namespace sk_graphic {
                     tilemap[y][x].Draw(
                         zero_pos + glm::vec2(x, y) * (tile_size + tile_gap),
                         this->depth,
-                        glm::vec2(0.5f),
+                        glm::vec2(0),
                         false, false, color);
                 }
             }
         }
+        Renderer2D_AddDotX(glm::vec3(this->position, this->depth));
+
     }
 
     void Tilemap2D::SetTile(int x, int y, const Sprite2D& sprite) {
@@ -63,4 +66,7 @@ namespace sk_graphic {
         tilemap[y][x] = sprite;
     }
 
+    glm::vec2 Tilemap2D::GetPosition(const glm::vec2 pivot) const {
+        return position + map_size * pivot;
+    }
 }

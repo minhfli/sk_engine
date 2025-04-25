@@ -41,14 +41,16 @@ namespace sk_game {
         sk_graphic::Sprite2D noise_sprite[3];
         sk_graphic::Sprite2D noise_sprite2[10];
 
+        int noise_map_size = 256;
+
         sk_graphic::NoiseMap genPerlinSprite() {
             sk_graphic::ValueNoise noise1(0, 4);
             sk_graphic::ValueNoise noise2(0, 8);
             sk_graphic::ValueNoise noise3(0, 16);
             sk_graphic::ValueNoise noise4(0, 32);
-            sk_graphic::NoiseMap noise_map1 = noise1.toNoiseMap(160, 160);
-            sk_graphic::NoiseMap noise_map2 = noise2.toNoiseMap(160, 160);
-            sk_graphic::NoiseMap noise_map3 = noise3.toNoiseMap(160, 160);
+            sk_graphic::NoiseMap noise_map1 = noise1.toNoiseMap(noise_map_size, noise_map_size);
+            sk_graphic::NoiseMap noise_map2 = noise2.toNoiseMap(noise_map_size, noise_map_size);
+            sk_graphic::NoiseMap noise_map3 = noise3.toNoiseMap(noise_map_size, noise_map_size);
             sk_graphic::NoiseMap noise_map4 = sk_graphic::addNoiseMap(noise_map1, noise_map2);
             sk_graphic::NoiseMap noise_map5 = sk_graphic::addNoiseMap(noise_map3, noise_map4);
             sk_graphic::Texture2D tex1 = noise_map1.toTexture();
@@ -86,7 +88,7 @@ namespace sk_game {
         cam->ProjectionO(camsize, 1280, 720);
         cam->position = glm::vec3(0.0f, 0.0f, 0.0f);
 
-        physic_world.Hint_WorldBound(glm::vec4(-512, -512, 512, 512));
+        physic_world.Hint_WorldBound(glm::vec4(-256, -256, 256, 256));
         physic_world.Init();
         physic_world.enable_debug_draw = true;
     }
@@ -97,11 +99,11 @@ namespace sk_game {
         sk_graphic::RandomNoise R_noise(0, 8);
         sk_graphic::ValueNoise V_noise(0, 8);
         sk_graphic::PerlinNoise P_noise(0, 8);
-        tex = R_noise.genTexture(160, 160);
+        tex = R_noise.genTexture(noise_map_size, noise_map_size);
         noise_sprite[0].LoadTexture(tex, glm::vec2(10));
-        tex = V_noise.genTexture(160, 160);
+        tex = V_noise.genTexture(noise_map_size, noise_map_size);
         noise_sprite[1].LoadTexture(tex, glm::vec2(10));
-        tex = P_noise.genTexture(160, 160);
+        tex = P_noise.genTexture(noise_map_size, noise_map_size);
         noise_sprite[2].LoadTexture(tex, glm::vec2(10));
 
         sk_graphic::NoiseMap selected_noise_map = genPerlinSprite();
@@ -113,20 +115,23 @@ namespace sk_game {
         Bitset2D bitset = selected_noise_map.filter(128, 256, true);
         Bitset2D bitset2 = selected_noise_map.filter(64, 256, true);
 
-        tilemap.Init(160, 160, 0, glm::vec2(1), glm::vec2(0), glm::vec2(2), glm::vec2(0.5f));
-        for (int i = 0; i < 160; i++)
-            for (int j = 0; j < 160; j++)
+        tilemap.Init(noise_map_size, noise_map_size, 0, glm::vec2(1), glm::vec2(0), glm::vec2(0), glm::vec2(0.5f));
+        for (int i = 0; i < noise_map_size; i++)
+            for (int j = 0; j < noise_map_size; j++)
                 if (bitset(i, j)) {
                     tilemap.SetTile(i, j, sprite);
                     sk_physic2d::pixel_perfect::irect rect =
-                        sk_physic2d::pixel_perfect::irect::irect_fbound(glm::vec4(i, j, i + 1, j + 1));
+                        sk_physic2d::pixel_perfect::irect::irect_fbound(
+                            glm::vec4(i, j, i + 1, j + 1)
+                            + glm::vec4(tilemap.GetPosition(glm::vec2(0)), tilemap.GetPosition(glm::vec2(0)))
+                        );
 
                     sk_physic2d::pixel_perfect::Body_Def def(rect);
                     physic_world.Create_Body(def);
                 }
-        bg_tilemap.Init(160, 160, -1, glm::vec2(1), glm::vec2(0), glm::vec2(2), glm::vec2(0.5f));
-        for (int i = 0; i < 160; i++)
-            for (int j = 0; j < 160; j++)
+        bg_tilemap.Init(noise_map_size, noise_map_size, -1, glm::vec2(1), glm::vec2(0), glm::vec2(0), glm::vec2(0.5f));
+        for (int i = 0; i < noise_map_size; i++)
+            for (int j = 0; j < noise_map_size; j++)
                 if (bitset2(i, j))
                     bg_tilemap.SetTile(i, j, sprite);
     }
@@ -181,8 +186,8 @@ namespace sk_game {
         tilemap.Draw(glm::vec2(0), glm::vec4(1));
         bg_tilemap.Draw(glm::vec2(0), glm::vec4(glm::vec3(0.5f), 1.0f));
 
-        for (int i = 0; i < 3; i++)
-            noise_sprite[i].Draw(glm::vec2(-0.5 + i * 10, -0.5), 1, glm::vec2(0.5f));
+        // for (int i = 0; i < 3; i++)
+        //     noise_sprite[i].Draw(glm::vec2(-0.5 + i * 10, -0.5), 1, glm::vec2(0.5f));
 
         for (int i = 0; i < 10; i++)
             noise_sprite2[i].Draw(glm::vec2(-0.5 + i * 10, 10.5), 1, glm::vec2(0.5f));
