@@ -1,6 +1,7 @@
 #include "AABB_World.h"
 
 #include "phy_tag.h"
+#include "Entity.h"
 
 #include <sk_engine/Graphics/Graphics.h>
 

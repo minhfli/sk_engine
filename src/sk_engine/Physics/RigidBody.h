@@ -4,7 +4,7 @@
 
 namespace sk_physic2d {
     class RigidBody {
-        private:
-        b2Body* body;
+        public:
+
     };
 }
