@@ -18,8 +18,8 @@ class DynamicBitset2D {
     size_t m, n;
     boost::dynamic_bitset<> bits;
     public:
-    DynamicBitset2D(size_t rows, size_t cols)
-        : m(rows), n(cols), bits(rows* cols) {
+    DynamicBitset2D(size_t rows, size_t cols, bool init = false)
+        : m(rows), n(cols), bits(rows* cols, init) {
     }
 
     bool operator()(size_t row, size_t col) const {
