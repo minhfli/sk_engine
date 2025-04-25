@@ -165,7 +165,7 @@ namespace sk_physic2d {
             //* movement ----------------------------------------------------------------------------------------------
             glm::vec2 move_amount =
                 a_body.RECT.offset +
-                a_body.velocity * sk_time::delta_time * (float)INTCOORD_PRECISION +
+                a_body.velocity * sk_time::fixed_delta_time * (float)INTCOORD_PRECISION +
                 a_body.move_amount * (float)INTCOORD_PRECISION;
             a_body.move_amount = glm::vec2(0);
 
@@ -181,7 +181,7 @@ namespace sk_physic2d {
             Body& s_body = m_Body[id];
             glm::vec2 move_amount =
                 s_body.RECT.offset +
-                s_body.velocity * sk_time::delta_time * (float)INTCOORD_PRECISION +
+                s_body.velocity * sk_time::fixed_delta_time * (float)INTCOORD_PRECISION +
                 s_body.move_amount * (float)INTCOORD_PRECISION;
             s_body.move_amount = glm::vec2(0);
 

@@ -53,26 +53,32 @@ namespace sk_main {
             // all game update and draw is in fixed time step
             if (sk_time::current_real_tick - last_fixed_update_tick >= sk_time::fixed_delta_tick) {
                 last_fixed_update_tick += sk_time::fixed_delta_tick;
-
-                sk_time::current_tick += sk_time::fixed_delta_tick;
-                sk_time::current_time = (float)sk_time::current_tick * 0.001;
-
-                if (sk_time::current_real_tick - last_fixed_update_tick >= sk_time::fixed_delta_tick) {
-                    std::cout << "Error: Skiped " << sk_time::current_real_tick - last_fixed_update_tick << " ticks" << '\n';
-                    last_fixed_update_tick = sk_time::current_real_tick;
-                }
-
-                sk_window::Process_event();
-
-                sk_window::BeginFrame();
-                sk_graphic::Renderer2D_Begin();
-
-                sk_game::GameLoop();
-
-                sk_graphic::Renderer2D_End();
-                sk_window::EndFrame();
+                sk_game::UpdateFixed();
             }
+            if (sk_time::current_real_tick - last_fixed_update_tick >= sk_time::fixed_delta_tick) {
+                last_fixed_update_tick += sk_time::fixed_delta_tick;
+                sk_game::UpdateFixed();
+            }
+            if (sk_time::current_real_tick - last_fixed_update_tick >= sk_time::fixed_delta_tick) {
+                std::cout << "Maximum Fixed update retry reached, skipping frame" << '\n';
+                std::cout << "Error: Skiped " << sk_time::current_real_tick - last_fixed_update_tick << " ticks" << '\n';
+                last_fixed_update_tick = sk_time::current_real_tick;
+            }
+
+            sk_time::current_tick = SDL_GetTicks();
+            sk_time::current_time = (float)sk_time::current_tick * 0.001;
+
+            sk_window::Process_event();
+
+            sk_window::BeginFrame();
+            sk_graphic::Renderer2D_Begin();
+
+            sk_game::GameLoop();
+
+            sk_graphic::Renderer2D_End();
+            sk_window::EndFrame();
         }
+
         sk_game::Stop();
     }
     void Quit() {
