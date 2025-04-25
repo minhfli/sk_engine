@@ -15,7 +15,7 @@ constexpr double M_PI = 3.14159265358979323846;
 namespace sk_graphic {
     namespace {
         std::hash<int> int_hasher;
-        uint32_t hash(int x, int y, int seed = 0) {
+        uint32_t hash(int y, int x, int seed = 0) {
             uint32_t h = static_cast<uint32_t>(x * 374761393 + y * 668265263 + seed); // large primes
             h = (h ^ (h >> 13)) * 1274126177;
             return h;
@@ -32,7 +32,7 @@ namespace sk_graphic {
         }
     }
 #pragma region BaseNoise
-    Texture2D Noise::genTexture(const int width, const int height) {
+    Texture2D Noise::genTexture(const int height, const int width) {
         unsigned char* data = new unsigned char[width * height * sizeof(unsigned char)];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -57,43 +57,49 @@ namespace sk_graphic {
         return texture;
     }
 
-    std::vector<std::vector<float>> Noise::genNoiseMap255(const int width, const int height) {
+    std::vector<std::vector<float>> Noise::genNoiseMap255(const int height, const int width, const float scale) {
         std::vector<std::vector<float>> noise_map(height, std::vector<float>(width, 0));
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                try {
-                    noise_map[y][x] = getValue255(x, y);
-                }
-                catch (...) {
-                    std::cout << "GetValue255 is not implemented in this class" << std::endl;
-                }
+                noise_map[y][x] = getValue255(x, y) * scale;
             }
         }
         return noise_map;
     }
+
+    NoiseMap Noise::toNoiseMap(const int height, const int width, const glm::ivec2 offset) {
+        std::vector<std::vector<float>> noise_map(height, std::vector<float>(width, 0));
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                noise_map[y][x] = getValue255(y, x);
+            }
+        }
+        return NoiseMap(height, width, noise_map);
+    }
+
 #pragma endregion BaseNoise
 
 #pragma region RandomNoise
 
-    uint32_t RandomNoise::GetValue(int x, int y) {
+    uint32_t RandomNoise::GetValue(int y, int x) {
         return hash(x - x % samples, y - y % samples, seed);
     }
 
-    float RandomNoise::getValue01(int x, int y) {
+    float RandomNoise::getValue01(int y, int x) {
         return static_cast<double>(GetValue(x, y)) / static_cast<double>(UINT32_MAX);
     }
 
-    float RandomNoise::getValue255(int x, int y) {
+    float RandomNoise::getValue255(int y, int x) {
         return static_cast<double>(GetValue(x, y)) / static_cast<double>(UINT32_MAX >> 8);
     }
 #pragma endregion RandomNoise
 
 #pragma region ValueNoise
-    uint32_t ValueNoise::GetValue(int x, int y) {
+    uint32_t ValueNoise::GetValue(int y, int x) {
         return hash(x - x % samples, y - y % samples, seed);
     }
 
-    float ValueNoise::getValue01(int x, int y) {
+    float ValueNoise::getValue01(int y, int x) {
         int mod_x = x % samples;
         int lo_x = x - mod_x;
         int hi_x = lo_x + samples;
@@ -114,7 +120,7 @@ namespace sk_graphic {
         return smoothstep(lerp_x_Lo_y, lerp_x_Hi_y, static_cast<double>(mod_y) / static_cast<double>(samples));
     }
 
-    float ValueNoise::getValue255(int x, int y) {
+    float ValueNoise::getValue255(int y, int x) {
         int mod_x = x % samples;
         int lo_x = x - mod_x;
         int hi_x = lo_x + samples;
@@ -138,27 +144,6 @@ namespace sk_graphic {
 
 #pragma region PerlinNoise
 
-    std::vector<std::vector<float>> PerlinNoise::genNoiseMap255(const int width, const int height) {
-        std::vector<std::vector<float>> noiseMap(height, std::vector<float>(width));
-        float minVal = 1e9, maxVal = -1e9;
-
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                float nx = (float)x / samples;
-                float ny = (float)y / samples;
-                float val = perlin(nx, ny);
-                minVal = std::min(minVal, val);
-                maxVal = std::max(maxVal, val);
-                noiseMap[y][x] = val;
-            }
-        }
-
-        for (auto& row : noiseMap)
-            for (auto& val : row)
-                val = ((val - minVal) / (maxVal - minVal)) * 255.0f;
-
-        return noiseMap;
-    }
 
     void PerlinNoise::initGradients() {
         int gridSize = 512 / samples + 2;
@@ -201,17 +186,17 @@ namespace sk_graphic {
         return lerp(ix0, ix1, sy);
     }
 
-    float PerlinNoise::getValue01(int x, int y) {
+    float PerlinNoise::getValue01(int y, int x) {
         float nx = static_cast<float>(x) / samples;
         float ny = static_cast<float>(y) / samples;
         return (perlin(nx, ny) + 1.0f) * 0.5f;
     }
 
-    float PerlinNoise::getValue255(int x, int y) {
+    float PerlinNoise::getValue255(int y, int x) {
         return getValue01(x, y) * 255.0f;
     }
 
-    uint32_t PerlinNoise::GetValue(int x, int y) {
+    uint32_t PerlinNoise::GetValue(int y, int x) {
         return static_cast<uint32_t>(getValue01(x, y) * 4294967295.0f);
     }
 #pragma endregion PerlinNoise

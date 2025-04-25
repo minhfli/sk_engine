@@ -12,8 +12,8 @@ namespace sk_graphic {
         ValueNoise(const std::string& seed, const int samples = 16) : Noise(seed, samples) {}
         ~ValueNoise() = default;
 
-        uint32_t GetValue(int x, int y) override;
-        float getValue01(int x, int y) override;
-        float getValue255(int x, int y) override;
+        uint32_t GetValue(int y, int x) override;
+        float getValue01(int y, int x) override;
+        float getValue255(int y, int x) override;
     };
 }
