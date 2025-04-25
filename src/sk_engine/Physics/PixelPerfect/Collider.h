@@ -2,10 +2,12 @@
 
 #include <GLM/glm.hpp>
 
+namespace sk_engine {
+    class Entity;
+}
 
 namespace  sk_physic2d {
     namespace pixel_perfect {
-        class Entity;
 
         // physic layer of physic body, a body can exist in multiple layers
         // a body can only interact with other body if there is a layer match
@@ -172,11 +174,11 @@ namespace  sk_physic2d {
             uint8_t layer;
             Body_Type type = Body_Type::STATIC_SOLID;
             Direction_tag direction = Direction_tag::NONE;
-            Entity* entity;
+            sk_engine::Entity* entity;
 
             /// @param t collider type, 0:solid, 1:actor, 2:triggerer
             /// @param tg tag
-            Body_Def(irect r, int weight = 1, Body_Type t = Body_Type::STATIC_SOLID, Direction_tag dir = Direction_tag::NONE, uint8_t layer = layer1, Entity* e = nullptr) :
+            Body_Def(irect r, int weight = 1, Body_Type t = Body_Type::STATIC_SOLID, Direction_tag dir = Direction_tag::NONE, uint8_t layer = layer1, sk_engine::Entity* e = nullptr) :
                 RECT(r),
                 weight(weight),
                 type(t),
@@ -193,7 +195,7 @@ namespace  sk_physic2d {
             uint8_t layer;
             Body_Type type = Body_Type::STATIC_SOLID;
             Direction_tag direction = Direction_tag::NONE;
-            Entity* entity;
+            sk_engine::Entity* entity;
 
             // use for dynamic movement of physic body, should be 0 if use moveamount to move body
             glm::vec2 velocity = glm::vec2(0);

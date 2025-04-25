@@ -6,9 +6,11 @@
 
 #include <sk_engine/Core/sk_time.h>
 #include "Collider.h"
-#include "Entity.h"
+#include <sk_engine/Core/Scene/Entity.h>
 
 #include <algorithm>
+
+using namespace sk_engine;
 
 namespace sk_physic2d {
     namespace pixel_perfect {

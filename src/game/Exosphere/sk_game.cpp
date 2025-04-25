@@ -12,6 +12,8 @@
 
 #include <sk_engine/Physics/PixelPerfect/AABB.h>
 
+#include "Player.h"
+
 #include <iostream>
 
 /*
@@ -41,7 +43,9 @@ namespace sk_game {
         sk_graphic::Sprite2D noise_sprite[3];
         sk_graphic::Sprite2D noise_sprite2[10];
 
-        int noise_map_size = 256;
+        int noise_map_size = 64;
+
+        Player player;
 
         sk_graphic::NoiseMap genPerlinSprite() {
             sk_graphic::ValueNoise noise1(0, 4);
@@ -91,6 +95,9 @@ namespace sk_game {
         physic_world.Hint_WorldBound(glm::vec4(-256, -256, 256, 256));
         physic_world.Init();
         physic_world.enable_debug_draw = true;
+
+        player.Init(&physic_world, cam);
+
     }
 
     void Start() {
@@ -134,6 +141,8 @@ namespace sk_game {
             for (int j = 0; j < noise_map_size; j++)
                 if (bitset2(i, j))
                     bg_tilemap.SetTile(i, j, sprite);
+
+        player.Start();
     }
     //! update cam size and positon, temporary
     void UpdateCam() {
@@ -162,6 +171,7 @@ namespace sk_game {
         UpdateCam();
         cam->Update();
         physic_world.Update();
+        player.Update();
     }
     //? fixed update, call before draw
     //? use for physics and stuff
@@ -180,7 +190,7 @@ namespace sk_game {
 
         glm::vec3 mouse_world_pos = cam->Screen_To_World(sk_input::MousePos(), glm::vec2(1280, 720));
         sk_graphic::Renderer2D_AddDotX(mouse_world_pos);
-
+        player.Draw();
         cam->Draw();
 
         tilemap.Draw(glm::vec2(0), glm::vec4(1));
