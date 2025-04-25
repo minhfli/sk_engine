@@ -11,6 +11,7 @@ sk engine is being developed parallel with games made with it
     STB_IMAGE:          load .png files
     NLOHMANN_JSON:      load .json files
     GLM:                math library
+    boost:              c++ boost library (header only)
     ENTT:               ECS # currently not used
 
 ## To run game:
