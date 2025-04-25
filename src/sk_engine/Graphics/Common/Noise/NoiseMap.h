@@ -10,6 +10,7 @@ namespace sk_graphic {
     /// @brief A class to represent a 2D noise, default range is [0, 256] (float) or [0, 255] (casted to uint8_t)
     class NoiseMap {
         public:
+        NoiseMap(const NoiseMap& other) = default;
         NoiseMap(const int height, const int width) : width(width), height(height) {
             noise_map = std::vector<std::vector<float>>(height, std::vector<float>(width, 0));
         }
@@ -43,6 +44,12 @@ namespace sk_graphic {
         void normalize();
         /// @brief create a new noise map and normalize it
         NoiseMap normalized();
+
+        /// @brief scale value of noise map
+        void scale_(float scale);
+
+        /// @brief  scale noisemap to this value
+        void setScale(float scale);
 
         /// @brief filter the noise map to a bitset
         /// @param lower 

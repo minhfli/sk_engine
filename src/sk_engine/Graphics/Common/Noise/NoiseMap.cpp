@@ -34,6 +34,19 @@ namespace sk_graphic {
         return result;
     }
 
+    void NoiseMap::scale_(float scale) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                noise_map[y][x] *= scale;
+            }
+        }
+        this->scale *= scale;
+    }
+    void NoiseMap::setScale(float scale) {
+        scale = scale / this->scale;
+        scale_(scale);
+    }
+
     Bitset2D NoiseMap::filter(float lower, float upper, bool normalize) {
         size_t height = noise_map.size();
         size_t width = noise_map[0].size();
