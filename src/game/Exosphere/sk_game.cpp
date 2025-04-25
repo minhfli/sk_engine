@@ -10,6 +10,7 @@
 
 #include <sk_engine/Graphics/Common/Noise/Noise.h>
 
+#include <sk_engine/Physics/PixelPerfect/AABB.h>
 
 #include <iostream>
 
@@ -29,6 +30,8 @@ namespace sk_game {
 
         float camsize = 11.25f;
         float default_camsize = 11.25f;
+
+        sk_physic2d::pixel_perfect::AABB_World physic_world;
 
         bool draw = true;
         sk_graphic::Sprite2D sprite;
@@ -83,6 +86,9 @@ namespace sk_game {
         cam->ProjectionO(camsize, 1280, 720);
         cam->position = glm::vec3(0.0f, 0.0f, 0.0f);
 
+        physic_world.Hint_WorldBound(glm::vec4(-512, -512, 512, 512));
+        physic_world.Init();
+        physic_world.enable_debug_draw = true;
     }
 
     void Start() {
@@ -110,9 +116,14 @@ namespace sk_game {
         tilemap.Init(160, 160, 0, glm::vec2(1), glm::vec2(0), glm::vec2(2), glm::vec2(0.5f));
         for (int i = 0; i < 160; i++)
             for (int j = 0; j < 160; j++)
-                if (bitset(i, j))
+                if (bitset(i, j)) {
                     tilemap.SetTile(i, j, sprite);
+                    sk_physic2d::pixel_perfect::irect rect =
+                        sk_physic2d::pixel_perfect::irect::irect_fbound(glm::vec4(i, j, i + 1, j + 1));
 
+                    sk_physic2d::pixel_perfect::Body_Def def(rect);
+                    physic_world.Create_Body(def);
+                }
         bg_tilemap.Init(160, 160, -1, glm::vec2(1), glm::vec2(0), glm::vec2(2), glm::vec2(0.5f));
         for (int i = 0; i < 160; i++)
             for (int j = 0; j < 160; j++)
@@ -145,7 +156,7 @@ namespace sk_game {
         //! update cam size and positon, temporary
         UpdateCam();
         cam->Update();
-
+        physic_world.Update();
     }
     //? fixed update, call before draw
     //? use for physics and stuff
@@ -175,6 +186,7 @@ namespace sk_game {
 
         for (int i = 0; i < 10; i++)
             noise_sprite2[i].Draw(glm::vec2(-0.5 + i * 10, 10.5), 1, glm::vec2(0.5f));
+        physic_world.Draw();
 
     }
 
