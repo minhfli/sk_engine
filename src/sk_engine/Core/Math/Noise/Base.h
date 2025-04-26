@@ -7,13 +7,6 @@
 #include <sk_engine/Core/Math/ValueMap2D.h>
 
 namespace sk_math {
-    enum class NoiseType {
-        NONE,
-        RANDOM,
-        PERLIN,
-
-    };
-
     class Noise {
         public:
         Noise(const int seed = 0, const int samples = 16) : seed(seed), samples(samples) {}
