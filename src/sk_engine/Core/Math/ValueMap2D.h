@@ -7,7 +7,7 @@
 
 namespace sk_math {
 
-    /// @brief A class to represent a 2D noise, default range is [0, 256] (float) or [0, 255] (casted to uint8_t)
+    /// @brief A class to represent a 2D noise, default range is [0, 1]
     class ValueMap2D {
         public:
         ValueMap2D(const ValueMap2D& other) = default;

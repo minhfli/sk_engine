@@ -43,8 +43,8 @@ namespace sk_game {
         sk_graphic::Sprite2D noise_sprite[3];
         sk_graphic::Sprite2D noise_sprite2[10];
 
-        int noise_map_height = 32;
-        int noise_map_width = 128;
+        int noise_map_height = 24;
+        int noise_map_width = 32;
 
         Player player;
 
@@ -74,11 +74,11 @@ namespace sk_game {
             noise_sprite2[3].LoadTexture(tex4, glm::vec2(10));
             noise_sprite2[4].LoadTexture(tex5, glm::vec2(10));
             std::cout << "Filtering Noise maps..." << std::endl;
-            sk_math::ValueMap2D noise_map6 = noise_map1.filterBlackWhite(128, 256);
-            sk_math::ValueMap2D noise_map7 = noise_map2.filterBlackWhite(128, 256);
-            sk_math::ValueMap2D noise_map8 = noise_map3.filterBlackWhite(128, 256);
-            sk_math::ValueMap2D noise_map9 = noise_map4.filterBlackWhite(128, 256, true);
-            sk_math::ValueMap2D noise_map10 = noise_map5.filterBlackWhite(128, 256, true);
+            sk_math::ValueMap2D noise_map6 = noise_map1.filterBlackWhite(0.5f, 1.0f);
+            sk_math::ValueMap2D noise_map7 = noise_map2.filterBlackWhite(0.5f, 1.0f);
+            sk_math::ValueMap2D noise_map8 = noise_map3.filterBlackWhite(0.5f, 1.0f);
+            sk_math::ValueMap2D noise_map9 = noise_map4.filterBlackWhite(0.5f, 1.0f, true);
+            sk_math::ValueMap2D noise_map10 = noise_map5.filterBlackWhite(0.5f, 1.0f, true);
             std::cout << "Loading textures... 6-10" << std::endl;
             sk_graphic::Texture2D tex6 = noise_map6.toTexture();
             sk_graphic::Texture2D tex7 = noise_map7.toTexture();
@@ -132,7 +132,7 @@ namespace sk_game {
         sprite.LoadTexture(tex, glm::vec2(1));
 
 
-        sk_math::Bitmask2D bitset = selected_noise_map.filter(128, 256, true);
+        sk_math::Bitmask2D bitset = selected_noise_map.filter(0.5f, 1.0f, true);
         sk_math::Bitmask2D bitset2 = selected_noise_map.filter(64, 256, true);
 
         tilemap.Init(noise_map_width, noise_map_height, 0, glm::vec2(1), glm::vec2(0), glm::vec2(0), glm::vec2(0.5f));

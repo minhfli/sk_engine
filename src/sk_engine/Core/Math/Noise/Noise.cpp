@@ -72,7 +72,7 @@ namespace sk_math {
         std::vector<std::vector<float>> noise_map(height, std::vector<float>(width, 0));
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                noise_map[y][x] = getValue255(y, x);
+                noise_map[y][x] = getValue01(y, x);
             }
         }
         return ValueMap2D(width, height, noise_map);

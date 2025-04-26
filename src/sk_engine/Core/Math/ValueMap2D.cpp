@@ -5,7 +5,7 @@ namespace sk_math {
         unsigned char* data = new unsigned char[width * height * sizeof(unsigned char)];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                float value = noise_map[y][x] / scale;
+                float value = noise_map[y][x] / scale * 255.0f;
                 uint8_t valueC = (uint8_t)value;
                 data[(y * width + x) + 0] = valueC;
             }
