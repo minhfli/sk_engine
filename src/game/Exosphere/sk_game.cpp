@@ -136,24 +136,23 @@ namespace sk_game {
         sk_math::Bitmask2D bitset2 = selected_noise_map.filter(64, 256, true);
 
         tilemap.Init(noise_map_width, noise_map_height, 0, glm::vec2(1), glm::vec2(0), glm::vec2(0), glm::vec2(0.5f));
-        for (int i = 0; i < noise_map_width; i++)
-            for (int j = 0; j < noise_map_height; j++)
-                if (bitset(i, j)) {
-                    tilemap.SetTile(i, j, sprite);
+        for (int y = 0; y < noise_map_height; ++y)
+            for (int x = 0; x < noise_map_width; ++x)
+                if (bitset(x, y)) {
+                    tilemap.SetTile(x, y, sprite);
                     sk_physic2d::pixel_perfect::irect rect =
                         sk_physic2d::pixel_perfect::irect::irect_fbound(
-                            glm::vec4(i, j, i + 1, j + 1)
+                            glm::vec4(x, y, x + 1, y + 1)
                             + glm::vec4(tilemap.GetPosition(glm::vec2(0)), tilemap.GetPosition(glm::vec2(0)))
                         );
-
                     sk_physic2d::pixel_perfect::Body_Def def(rect);
                     physic_world.Create_Body(def);
                 }
         bg_tilemap.Init(noise_map_width, noise_map_height, -1, glm::vec2(1), glm::vec2(0), glm::vec2(0), glm::vec2(0.5f));
-        for (int i = 0; i < noise_map_width; i++)
-            for (int j = 0; j < noise_map_height; j++)
-                if (bitset2(i, j))
-                    bg_tilemap.SetTile(i, j, sprite);
+        for (int y = 0; y < noise_map_height; ++y)
+            for (int x = 0; x < noise_map_width; ++x)
+                if (bitset2(x, y))
+                    bg_tilemap.SetTile(x, y, sprite);
 
         player.Start();
     }
