@@ -5,8 +5,8 @@ namespace sk_math {
         unsigned char* data = new unsigned char[width * height * sizeof(unsigned char)];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                float value = noise_map[y][x] / scale * 255.0f;
-                uint8_t valueC = (uint8_t)value;
+                float val = value[y][x] / scale * 256.0f;
+                uint8_t valueC = (uint8_t)val;
                 data[(y * width + x) + 0] = valueC;
             }
         }
@@ -18,7 +18,7 @@ namespace sk_math {
     void ValueMap2D::normalize() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                noise_map[y][x] /= scale;
+                value[y][x] /= scale;
             }
         }
         scale = 1.0f;
@@ -27,7 +27,7 @@ namespace sk_math {
         ValueMap2D result(width, height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                result.noise_map[y][x] = noise_map[y][x] / scale;
+                result.value[y][x] = value[y][x] / scale;
             }
         }
         result.scale = 1.0f;
@@ -37,7 +37,7 @@ namespace sk_math {
     void ValueMap2D::scale_(float scale) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                noise_map[y][x] *= scale;
+                value[y][x] *= scale;
             }
         }
         this->scale *= scale;
@@ -48,15 +48,15 @@ namespace sk_math {
     }
 
     Bitmask2D ValueMap2D::filter(float lower, float upper, bool normalize) {
-        size_t height = noise_map.size();
-        size_t width = noise_map[0].size();
+        size_t height = value.size();
+        size_t width = value[0].size();
         Bitmask2D result(width, height);
 
         if (!normalize)
             for (size_t i = 0; i < height; ++i) {
                 for (size_t j = 0; j < width; ++j) {
-                    float value = noise_map[i][j];
-                    if (value >= lower && value <= upper) {
+                    float val = value[i][j];
+                    if (val >= lower && val <= upper) {
                         result.set(j, i);
                     }
                 }
@@ -64,8 +64,8 @@ namespace sk_math {
         else
             for (size_t i = 0; i < height; ++i) {
                 for (size_t j = 0; j < width; ++j) {
-                    float value = noise_map[i][j] / scale;
-                    if (value >= lower && value <= upper) {
+                    float val = value[i][j] / scale;
+                    if (val >= lower && val <= upper) {
                         result.set(j, i);
                     }
                 }
@@ -74,25 +74,25 @@ namespace sk_math {
     }
 
     ValueMap2D ValueMap2D::filterValue(float lower, float upper, bool normalize) {
-        size_t height = noise_map.size();
-        size_t width = noise_map[0].size();
+        size_t height = value.size();
+        size_t width = value[0].size();
         ValueMap2D result(width, height);
 
         if (!normalize)
             for (size_t i = 0; i < height; ++i) {
                 for (size_t j = 0; j < width; ++j) {
-                    float value = noise_map[i][j];
-                    if (value >= lower && value <= upper) {
-                        result.noise_map[i][j] = value;
+                    float val = value[i][j];
+                    if (val >= lower && val <= upper) {
+                        result.value[i][j] = val;
                     }
                 }
             }
         else
             for (size_t i = 0; i < height; ++i) {
                 for (size_t j = 0; j < width; ++j) {
-                    float value = noise_map[i][j] / scale;
-                    if (value >= lower && value <= upper) {
-                        result.noise_map[i][j] = value;
+                    float val = value[i][j] / scale;
+                    if (val >= lower && val <= upper) {
+                        result.value[i][j] = val;
                     }
                 }
             }
@@ -100,25 +100,25 @@ namespace sk_math {
     }
 
     ValueMap2D ValueMap2D::filterBlackWhite(float lower, float upper, bool normalize) {
-        size_t height = noise_map.size();
-        size_t width = noise_map[0].size();
+        size_t height = value.size();
+        size_t width = value[0].size();
         ValueMap2D result(width, height);
 
         if (!normalize)
             for (size_t i = 0; i < height; ++i) {
                 for (size_t j = 0; j < width; ++j) {
-                    float value = noise_map[i][j];
-                    if (value >= lower && value <= upper) {
-                        result.noise_map[i][j] = 255;
+                    float val = value[i][j];
+                    if (val >= lower && val <= upper) {
+                        result.value[i][j] = 1;
                     }
                 }
             }
         else
             for (size_t i = 0; i < height; ++i) {
                 for (size_t j = 0; j < width; ++j) {
-                    float value = noise_map[i][j] / scale;
-                    if (value >= lower && value <= upper) {
-                        result.noise_map[i][j] = 255;
+                    float val = value[i][j] / scale;
+                    if (val >= lower && val <= upper) {
+                        result.value[i][j] = 1;
                     }
                 }
             }
@@ -131,7 +131,7 @@ namespace sk_math {
         }
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                noise_map[y][x] += other.noise_map[y][x];
+                value[y][x] += other.value[y][x];
             }
         }
         scale += other.scale;
@@ -144,10 +144,37 @@ namespace sk_math {
         ValueMap2D result(a.width, a.height);
         for (int y = 0; y < a.height; y++) {
             for (int x = 0; x < a.width; x++) {
-                result.noise_map[y][x] = a.noise_map[y][x] + b.noise_map[y][x];
+                result.value[y][x] = a.value[y][x] + b.value[y][x];
             }
         }
         result.scale = a.scale + b.scale;
+        return result;
+    }
+
+    void ValueMap2D::mul(const ValueMap2D& other) {
+        if (height != other.height || width != other.width) {
+            throw std::invalid_argument("Noise maps must have the same dimensions to be multiplied");
+            return;
+        }
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                value[y][x] *= other.value[y][x];
+            }
+        }
+        scale *= other.scale;
+    }
+
+    ValueMap2D mulValueMap2D(ValueMap2D& a, const ValueMap2D& b) {
+        if (a.height != b.height || a.width != b.width) {
+            throw std::invalid_argument("Noise maps must have the same dimensions to be multiplied");
+        }
+        ValueMap2D result(a.width, a.height);
+        for (int y = 0; y < a.height; y++) {
+            for (int x = 0; x < a.width; x++) {
+                result.value[y][x] = a.value[y][x] * b.value[y][x];
+            }
+        }
+        result.scale = a.scale * b.scale;
         return result;
     }
 }

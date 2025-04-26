@@ -12,11 +12,11 @@ namespace sk_math {
         public:
         ValueMap2D(const ValueMap2D& other) = default;
         ValueMap2D(const int width, const int height) : width(width), height(height) {
-            noise_map = std::vector<std::vector<float>>(height, std::vector<float>(width, 0));
+            value = std::vector<std::vector<float>>(height, std::vector<float>(width, 0));
         }
-        ValueMap2D(const int width, const int height, const std::vector<std::vector<float>>& noise_map, const float scale = 1.0f)
-            : width(width), height(height), noise_map(noise_map), scale(scale) {
-            if (noise_map.size() != height || noise_map[0].size() != width) {
+        ValueMap2D(const int width, const int height, const std::vector<std::vector<float>>& value, const float scale = 1.0f)
+            : width(width), height(height), value(value), scale(scale) {
+            if (value.size() != height || value[0].size() != width) {
                 throw std::invalid_argument("Noise map size does not match the specified width and height");
             }
         }
@@ -24,7 +24,7 @@ namespace sk_math {
 
         const int height;
         const int width;
-        std::vector<std::vector<float>> noise_map;
+        std::vector<std::vector<float>> value;
 
         /// @brief Scale factor, used when adding noise maps together, then is divided when generating the texture
         float scale = 1.0f;
@@ -33,11 +33,11 @@ namespace sk_math {
 
         // aceess
         std::vector<float>& operator[](int i) {
-            return noise_map[i % height];
+            return value[i % height];
         }
 
         float& operator()(int x, int y) {
-            return noise_map[y % height][x % width];
+            return value[y % height][x % width];
         }
 
         /// @brief reset scale factor to 1.0f
@@ -73,8 +73,10 @@ namespace sk_math {
         ValueMap2D filterBlackWhite(float lower, float upper, bool normalize = false);
 
         void add(const ValueMap2D& other);
+        void mul(const ValueMap2D& other);
     };
 
     ValueMap2D addValueMap2D(ValueMap2D& a, const ValueMap2D& b);
+    ValueMap2D mulValueMap2D(ValueMap2D& a, const ValueMap2D& b);
 
 }
