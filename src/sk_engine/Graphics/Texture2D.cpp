@@ -32,7 +32,7 @@ namespace sk_graphic {
         glGenTextures(1, &this->ID);
         //texture_id[path] = ID;
         glBindTexture(GL_TEXTURE_2D, this->ID);
-        std::cout << width << " " << height << " " << Channels << " " << ID << '\n';
+        // std::cout << width << " " << height << " " << Channels << " " << ID << '\n';
 
         //? texture settings
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -65,7 +65,7 @@ namespace sk_graphic {
         glGenTextures(1, &this->ID);
                 //texture_id[path] = ID;
         glBindTexture(GL_TEXTURE_2D, this->ID);
-        std::cout << width << " " << height << " " << channels << " " << ID << '\n';
+        // std::cout << width << " " << height << " " << channels << " " << ID << '\n';
         //? texture settings
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
