@@ -137,6 +137,12 @@ namespace sk_math {
         scale += other.scale;
     }
 
+    void ValueMap2D::flip() {
+        for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+                value[y][x] += scale - value[y][x];
+    }
+
     ValueMap2D addValueMap2D(ValueMap2D& a, const ValueMap2D& b) {
         if (a.height != b.height || a.width != b.width) {
             throw std::invalid_argument("Noise maps must have the same dimensions to be added");

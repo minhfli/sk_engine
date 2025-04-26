@@ -74,6 +74,10 @@ namespace sk_math {
 
         void add(const ValueMap2D& other);
         void mul(const ValueMap2D& other);
+
+        /// @brief flip the value, return as (1-value/scale)*scale
+        void flip();
+
     };
 
     ValueMap2D addValueMap2D(ValueMap2D& a, const ValueMap2D& b);
