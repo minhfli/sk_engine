@@ -33,7 +33,7 @@ namespace sk_math {
         }
     }
 #pragma region BaseNoise
-    sk_graphic::Texture2D Noise::genTexture(const int height, const int width) {
+    sk_graphic::Texture2D Noise::genTexture(const int width, const int height) {
         unsigned char* data = new unsigned char[width * height * sizeof(unsigned char)];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -58,24 +58,24 @@ namespace sk_math {
         return texture;
     }
 
-    std::vector<std::vector<float>> Noise::genNoiseMap255(const int height, const int width, const float scale) {
-        std::vector<std::vector<float>> noise_map(height, std::vector<float>(width, 0));
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                noise_map[y][x] = getValue255(x, y) * scale;
-            }
-        }
-        return noise_map;
-    }
+    // std::vector<std::vector<float>> Noise::genValueMap2D255(const int height, const int width, const float scale) {
+    //     std::vector<std::vector<float>> noise_map(height, std::vector<float>(width, 0));
+    //     for (int y = 0; y < height; y++) {
+    //         for (int x = 0; x < width; x++) {
+    //             noise_map[y][x] = getValue255(x, y) * scale;
+    //         }
+    //     }
+    //     return noise_map;
+    // }
 
-    NoiseMap Noise::toNoiseMap(const int height, const int width, const glm::ivec2 offset) {
+    ValueMap2D Noise::toValueMap2D(const int width, const int height, const glm::ivec2 offset) {
         std::vector<std::vector<float>> noise_map(height, std::vector<float>(width, 0));
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 noise_map[y][x] = getValue255(y, x);
             }
         }
-        return NoiseMap(height, width, noise_map);
+        return ValueMap2D(width, height, noise_map);
     }
 
 #pragma endregion BaseNoise

@@ -30,8 +30,8 @@ namespace sk_graphic {
          * @param parallax_speed Speed of the parallax effect
          */
         void Init(
-            const int height,
             const int width,
+            const int height,
             const float depth = 0.0f,
             const glm::vec2 tile_size = glm::vec2(1.0f),
             const glm::vec2 tile_gap = glm::vec2(0.0f),
@@ -67,6 +67,5 @@ namespace sk_graphic {
         std::vector<std::vector<Sprite2D>> tilemap;
 
     };
-
 
 }

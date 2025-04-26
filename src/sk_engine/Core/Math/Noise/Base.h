@@ -4,7 +4,7 @@
 
 #include <GLM/glm.hpp>
 #include <sk_engine/Graphics/Texture2D.h>
-#include "NoiseMap.h"
+#include <sk_engine/Core/Math/ValueMap2D.h>
 
 namespace sk_math {
     enum class NoiseType {
@@ -42,12 +42,12 @@ namespace sk_math {
         }
 
         /// @brief generate a texture from the noise, you can use this texture to display
-        sk_graphic::Texture2D genTexture(const int height, const int width);
+        sk_graphic::Texture2D genTexture(const int width, const int height);
 
         /// @brief generate a 2D array of noise value, in range [0, 256] * scale, only use at startup, because it might be slow
-        virtual std::vector<std::vector<float>> genNoiseMap255(const int height, const int width, const float scale = 1.0f);
+        // virtual std::vector<std::vector<float>> genValueMap2D255(const int height, const int width, const float scale = 1.0f);
 
-        virtual NoiseMap toNoiseMap(const int height, const int width, const glm::ivec2 offset = glm::ivec2(0, 0));
+        virtual ValueMap2D toValueMap2D(const int width, const int height, const glm::ivec2 offset = glm::ivec2(0, 0));
 
     };
 }

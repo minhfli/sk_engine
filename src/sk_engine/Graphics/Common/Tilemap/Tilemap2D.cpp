@@ -10,8 +10,8 @@ namespace sk_graphic {
     }
 
     void Tilemap2D::Init(
-        const int height,
         const int width,
+        const int height,
         const float depth,
         const glm::vec2 tile_size,
         const glm::vec2 tile_gap,
@@ -25,13 +25,11 @@ namespace sk_graphic {
         this->depth = depth;
         this->tile_size = tile_size;
         this->tile_gap = tile_gap;
-        this->map_size = (tile_size + tile_gap) * glm::vec2(height, width);
+        this->map_size = (tile_size + tile_gap) * glm::vec2(width, height);
         this->position = position - map_size * pivot;
         this->pivot = pivot;
         this->parallax = parallax;
         this->parallax_speed = parallax_speed;
-
-
 
         tilemap.resize(height, std::vector<Sprite2D>(width));
 
