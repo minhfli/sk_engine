@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 #include <sk_engine/Graphics/Texture2D.h>
-#include <sk_engine/Core/Math/Bitset2D.h>
+#include <sk_engine/Core/Math2D/Bitset2D.h>
 
 namespace sk_math {
 

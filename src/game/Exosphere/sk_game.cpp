@@ -8,7 +8,7 @@
 
 #include <ImGUI/imgui.h>
 
-#include <sk_engine/Core/Math/Noise/Noise.h>
+#include <sk_engine/Core/Math2D/Noise/Noise.h>
 
 #include <sk_engine/Physics/PixelPerfect/AABB.h>
 
